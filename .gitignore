@@ -1,0 +1,7 @@
+# Compiled Java class files
+# out/
+
+# JetBrains IDE
+.idea/
+
+searchApp.iml
