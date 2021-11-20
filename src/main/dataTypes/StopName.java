@@ -1,10 +1,12 @@
+package dataTypes;
+
 import java.util.Objects;
 
-public class LineName {
+public class StopName {
 
     private final String name;
 
-    public LineName(String name) {
+    public StopName(String name) {
         if (name == null) throw new IllegalArgumentException("Name cannot be null.");
         this.name = name;
     }
@@ -13,8 +15,8 @@ public class LineName {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        LineName lineName = (LineName) o;
-        return name.equals(lineName.name);
+        StopName stopName = (StopName) o;
+        return name.equals(stopName.name);
     }
 
     @Override
