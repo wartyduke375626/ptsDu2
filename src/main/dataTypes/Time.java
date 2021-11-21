@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Time implements Comparable<Time>{
 
-    private long time;
+    private final long time;
 
     public Time(long time) {
         if (time < 0) throw new IllegalArgumentException("Time value cannot be negative.");
@@ -26,11 +26,6 @@ public class Time implements Comparable<Time>{
 
     public long getTime() {
         return time;
-    }
-
-    public void setTime(long time) {
-        if (time < 0) throw new IllegalArgumentException("Time value cannot be negative.");
-        this.time = time;
     }
 
     @Override

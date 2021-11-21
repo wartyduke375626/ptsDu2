@@ -8,9 +8,9 @@ public interface StopInterface {
 
     void updateReachableAt(Time time, LineName line);
 
-    void updateReachableAt(Time time);
-
     Pair<Time, LineName> getReachableAt();
+
+    StopName getStopName();
 
     List<LineName> getLines();
 }
