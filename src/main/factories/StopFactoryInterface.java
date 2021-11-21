@@ -1,5 +1,6 @@
-package components;
+package factories;
 
+import components.StopInterface;
 import dataTypes.StopName;
 
 import java.util.Optional;

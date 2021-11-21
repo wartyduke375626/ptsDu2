@@ -1,5 +1,7 @@
-package components;
+package factories;
 
+import components.Stop;
+import components.StopInterface;
 import dataTypes.*;
 
 import java.util.*;
