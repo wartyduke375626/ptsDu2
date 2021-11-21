@@ -3,6 +3,7 @@ package components;
 import dataTypes.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Stop implements StopInterface {
@@ -14,7 +15,7 @@ public class Stop implements StopInterface {
 
     public Stop(StopName stopName, List<LineName> lines) {
         this.stopName = stopName;
-        this.lines = new ArrayList<>(lines);
+        this.lines = Collections.unmodifiableList(lines);
     }
 
     @Override
@@ -35,6 +36,6 @@ public class Stop implements StopInterface {
 
     @Override
     public List<LineName> getLines() {
-        return new ArrayList<>(lines);
+        return Collections.unmodifiableList(lines);
     }
 }
