@@ -46,24 +46,27 @@ public class Line implements LineInterface {
             Triplet<Time, StopName, Boolean> data = lineSegments.get(i).nextStopAndUpdateReachable(catchableAt);
             if (!data.getThird()) return;
             catchableAt = data.getFirst();
-            nextStop = data.getSecond();
+            i++;
         }
     }
 
     @Override
     public StopName updateCapacityAndGetPreviousStop(StopName stop, Time time) {
+        if (stop.equals(firstStop)) throw new NoSuchElementException("No previous stop in line.");
         int i = 0;
         StopName nextStop = firstStop;
+        StopName previousStop;
         Time startTime = startingTimes.get(0);
-        while (!nextStop.equals(stop)) {
-            i++;
+        do {
             if (i >= lineSegments.size()) throw new NoSuchElementException("No such stop in lineSegments");
             Pair<Time, StopName> data = lineSegments.get(i).nextStop(startTime);
             startTime = data.getFirst();
+            previousStop = nextStop;
             nextStop = data.getSecond();
-        }
+            i++;
+        } while (!nextStop.equals(stop));
 
-        lineSegments.get(i).incrementCapacity(time);
-        return null;
+        lineSegments.get(--i).incrementCapacity(time);
+        return previousStop;
     }
 }

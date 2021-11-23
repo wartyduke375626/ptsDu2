@@ -2,9 +2,9 @@ package components;
 
 import dataTypes.*;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class Stop implements StopInterface {
 
@@ -25,8 +25,8 @@ public class Stop implements StopInterface {
     }
 
     @Override
-    public Pair<Time, LineName> getReachableAt() {
-        return new Pair<>(reachableAt, reachableVia);
+    public Pair<Optional<Time>, Optional<LineName>> getReachableAt() {
+        return new Pair<>(Optional.ofNullable(reachableAt), Optional.ofNullable(reachableVia));
     }
 
     @Override
@@ -36,6 +36,6 @@ public class Stop implements StopInterface {
 
     @Override
     public List<LineName> getLines() {
-        return Collections.unmodifiableList(lines);
+        return lines;
     }
 }

@@ -29,6 +29,11 @@ public class Time implements Comparable<Time>{
     }
 
     @Override
+    public String toString() {
+        return Long.toString(time);
+    }
+
+    @Override
     public int compareTo(Time o) {
         return Long.compareUnsigned(this.time, o.time);
     }
