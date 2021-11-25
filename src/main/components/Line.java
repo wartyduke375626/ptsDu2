@@ -41,15 +41,23 @@ public class Line implements LineInterface {
 
         //determine earliest catchable bus at starting lineSegment
         Time earliestCatchable = new Time(startingTimes.get(0).getTime() + totalTimeDiff.getTime());
+        int earliestCatchableIndex = 0;
         for (int i=1; earliestCatchable.compareTo(time) < 0; i++) {
             if (i >= startingTimes.size()) return;
             earliestCatchable = new Time(startingTimes.get(i).getTime() + totalTimeDiff.getTime());
+            earliestCatchableIndex++;
         }
 
         //update reachable stops from starting lineSegment
         while (startingLineSegmentIndex < lineSegments.size()) {
             Triplet<Time, StopName, Boolean> data = lineSegments.get(startingLineSegmentIndex).nextStopAndUpdateReachable(earliestCatchable);
-            if (!data.getThird()) return;
+            if (!data.getThird()) {
+                earliestCatchableIndex++;
+                if (earliestCatchableIndex >= startingTimes.size()) return;
+                TimeDiff waitForNextBus = new TimeDiff(startingTimes.get(earliestCatchableIndex).getTime() - startingTimes.get(earliestCatchableIndex-1).getTime());
+                earliestCatchable = new Time(earliestCatchable.getTime() + waitForNextBus.getTime());
+                continue;
+            }
             earliestCatchable = data.getFirst();
             startingLineSegmentIndex++;
         }
