@@ -75,11 +75,19 @@ public class LineTest {
         assertEquals(stopsData.get(2).getSecond().get(), new LineName("L1"));
 
         resetStopsData();
-        line.updateReachable(new Time(5), new StopName("Stop B"));
+        line.updateReachable(new Time(15), new StopName("Stop B"));
         assertTrue(stopsData.get(0).getFirst().isEmpty() && stopsData.get(0).getSecond().isEmpty());
         assertTrue(stopsData.get(1).getFirst().isEmpty() && stopsData.get(1).getSecond().isEmpty());
         assertTrue(stopsData.get(2).getFirst().isPresent() && stopsData.get(2).getSecond().isPresent());
         assertEquals(stopsData.get(2).getFirst().get(), new Time(30));
+        assertEquals(stopsData.get(2).getSecond().get(), new LineName("L1"));
+
+        resetStopsData();
+        line.updateReachable(new Time(25), new StopName("Stop B"));
+        assertTrue(stopsData.get(0).getFirst().isEmpty() && stopsData.get(0).getSecond().isEmpty());
+        assertTrue(stopsData.get(1).getFirst().isEmpty() && stopsData.get(1).getSecond().isEmpty());
+        assertTrue(stopsData.get(2).getFirst().isPresent() && stopsData.get(2).getSecond().isPresent());
+        assertEquals(stopsData.get(2).getFirst().get(), new Time(40));
         assertEquals(stopsData.get(2).getSecond().get(), new LineName("L1"));
     }
 

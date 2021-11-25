@@ -5,6 +5,7 @@ import dataTypes.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public class Line implements LineInterface {
 
@@ -24,29 +25,33 @@ public class Line implements LineInterface {
 
     @Override
     public void updateReachable(Time time, StopName stop) {
-        Time catchableAt = startingTimes.get(0);
-        int i = 1;
-        while (catchableAt.compareTo(time) < 0) {
-            if (i >= startingTimes.size()) return;
-            catchableAt = startingTimes.get(i);
-            i++;
-        }
 
+        //find starting lineSegment and determine travel time from first stop till starting lineSegment
         StopName nextStop = firstStop;
-        i = 0;
-        while (!nextStop.equals(stop)) {
+        Time tmp = startingTimes.get(0);
+        int startingLineSegmentIndex = 0;
+        for (int i = 0; !Objects.equals(nextStop, stop); i++) {
             if (i >= lineSegments.size()) throw new NoSuchElementException("No such stop in lineSegments");
-            Pair<Time, StopName> data = lineSegments.get(i).nextStop(catchableAt);
-            catchableAt = data.getFirst();
+            Pair<Time, StopName> data = lineSegments.get(i).nextStop(tmp);
+            tmp = data.getFirst();
             nextStop = data.getSecond();
-            i++;
+            startingLineSegmentIndex++;
+        }
+        TimeDiff totalTimeDiff = new TimeDiff(tmp.getTime() - startingTimes.get(0).getTime());
+
+        //determine earliest catchable bus at starting lineSegment
+        Time earliestCatchable = new Time(startingTimes.get(0).getTime() + totalTimeDiff.getTime());
+        for (int i=1; earliestCatchable.compareTo(time) < 0; i++) {
+            if (i >= startingTimes.size()) return;
+            earliestCatchable = new Time(startingTimes.get(i).getTime() + totalTimeDiff.getTime());
         }
 
-        while (i < lineSegments.size()) {
-            Triplet<Time, StopName, Boolean> data = lineSegments.get(i).nextStopAndUpdateReachable(catchableAt);
+        //update reachable stops from starting lineSegment
+        while (startingLineSegmentIndex < lineSegments.size()) {
+            Triplet<Time, StopName, Boolean> data = lineSegments.get(startingLineSegmentIndex).nextStopAndUpdateReachable(earliestCatchable);
             if (!data.getThird()) return;
-            catchableAt = data.getFirst();
-            i++;
+            earliestCatchable = data.getFirst();
+            startingLineSegmentIndex++;
         }
     }
 
