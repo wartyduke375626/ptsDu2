@@ -1,5 +1,6 @@
 package managers;
 
+import components.StopInterface;
 import dataTypes.*;
 
 import java.util.List;
@@ -12,6 +13,8 @@ public interface StopsInterface {
     void setStartingStop(StopName stop, Time time);
 
     List<LineName> getLines(StopName stop);
+
+    StopInterface getStop(StopName stop);
 
     Pair<Optional<Time>, Optional<LineName>> getReachableAt(StopName stop);
 }

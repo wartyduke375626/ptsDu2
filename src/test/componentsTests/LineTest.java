@@ -1,5 +1,6 @@
+package componentsTests;
+
 import components.Line;
-import components.LineSegment;
 import components.LineSegmentInterface;
 import dataTypes.*;
 

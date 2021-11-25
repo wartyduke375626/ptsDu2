@@ -1,3 +1,5 @@
+package componentsTests;
+
 import components.Stop;
 import dataTypes.*;
 

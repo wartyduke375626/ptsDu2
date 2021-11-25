@@ -50,6 +50,12 @@ public class Stops implements StopsInterface {
     }
 
     @Override
+    public StopInterface getStop(StopName stop) {
+        if (!stops.containsKey(stop)) loadStop(stop);
+        return stops.get(stop);
+    }
+
+    @Override
     public Pair<Optional<Time>, Optional<LineName>> getReachableAt(StopName stop) {
         if (!stops.containsKey(stop)) throw new NoSuchElementException("Stop has not been loaded yet.");
         return stops.get(stop).getReachableAt();
