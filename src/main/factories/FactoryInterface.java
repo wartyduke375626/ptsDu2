@@ -9,6 +9,6 @@ public interface FactoryInterface {
 
     Optional<StopInterface> createStop(StopName stopName);
 
-    Optional<LineInterface> createLine(LineName lineName);
+    Optional<LineInterface> createLine(LineName lineName, Time time);
 
 }

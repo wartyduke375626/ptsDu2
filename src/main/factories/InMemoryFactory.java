@@ -28,7 +28,7 @@ public class InMemoryFactory implements FactoryInterface {
     }
 
     @Override
-    public Optional<LineInterface> createLine(LineName lineName) {
+    public Optional<LineInterface> createLine(LineName lineName, Time time) {
         if (!inMemoryLines.containsKey(lineName)) return Optional.empty();
         else {
             Triplet<List<Time>, StopName, List<LineSegmentInterface>> data = inMemoryLines.get(lineName);

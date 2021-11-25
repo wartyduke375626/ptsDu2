@@ -7,11 +7,11 @@ import java.util.Optional;
 
 public interface StopsInterface {
 
-    Optional<Pair<StopName, Time>> earliestReachableStopAfter();
+    Optional<Pair<StopName, Time>> earliestReachableStopAfter(Time time);
 
-    boolean setStartingStop(StopName stop, Time time);
+    void setStartingStop(StopName stop, Time time);
 
     List<LineName> getLines(StopName stop);
 
-    Pair<Time, LineName> getReachableAt(StopName stop);
+    Pair<Optional<Time>, Optional<LineName>> getReachableAt(StopName stop);
 }
