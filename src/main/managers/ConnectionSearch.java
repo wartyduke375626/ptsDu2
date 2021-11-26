@@ -33,7 +33,7 @@ public class ConnectionSearch {
 
         while (!tmpStop.equals(from)) {
             Pair<Time, Optional<LineName>> data = stops.getReachableAt(tmpStop);
-            if (data.getSecond().isEmpty()) throw new NullPointerException("A stop different to starting stop was not reached by line.");
+            if (data.getSecond().isEmpty()) throw new NullPointerException("A stop other than starting stop was not reached by line.");
             result.addTravelSegment(data.getSecond().get(), tmpStop, data.getFirst());
             tmpStop = lines.updateCapacityAndGetPreviousStop(data.getSecond().get(), tmpStop, data.getFirst());
         }

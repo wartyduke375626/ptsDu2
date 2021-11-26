@@ -18,6 +18,13 @@ public class ConnectionData {
 
     @Override
     public String toString() {
-        return "";
+        StringBuilder sb = new StringBuilder();
+        sb.append(startingStop.toString());
+        for (int i=travelSegments.size()-1; i>=0; i--) {
+            Triplet<LineName, StopName, Time> data = travelSegments.get(i);
+            sb.append("-->").append(data.getFirst().toString());
+            sb.append("-->").append(data.getSecond().toString());
+        }
+        return sb.toString();
     }
 }
