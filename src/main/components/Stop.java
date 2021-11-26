@@ -10,7 +10,7 @@ public class Stop implements StopInterface {
 
     private final StopName stopName;
     private final List<LineName> lines;
-    private Time reachableAt = null;
+    private Time reachableAt = new Time(Long.MAX_VALUE);
     private LineName reachableVia = null;
 
     public Stop(StopName stopName, List<LineName> lines) {
@@ -20,13 +20,16 @@ public class Stop implements StopInterface {
 
     @Override
     public void updateReachableAt(Time time, LineName line) {
-        reachableAt = time;
-        reachableVia = line;
+        if (time == null) throw new IllegalArgumentException("Time cannot be null.");
+        if (time.compareTo(reachableAt) < 0) {
+            reachableAt = time;
+            reachableVia = line;
+        }
     }
 
     @Override
-    public Pair<Optional<Time>, Optional<LineName>> getReachableAt() {
-        return new Pair<>(Optional.ofNullable(reachableAt), Optional.ofNullable(reachableVia));
+    public Pair<Time, Optional<LineName>> getReachableAt() {
+        return new Pair<>(reachableAt, Optional.ofNullable(reachableVia));
     }
 
     @Override

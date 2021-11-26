@@ -9,7 +9,7 @@ public interface StopInterface {
 
     void updateReachableAt(Time time, LineName line);
 
-    Pair<Optional<Time>, Optional<LineName>> getReachableAt();
+    Pair<Time, Optional<LineName>> getReachableAt();
 
     StopName getStopName();
 

@@ -23,17 +23,32 @@ public class StopTest {
     }
 
     @Test
-    public void TestStop() {
+    public void getMethodsTest() {
         assertEquals(stopName, stop.getStopName());
         assertEquals(lines, stop.getLines());
 
-        Pair<Optional<Time>, Optional<LineName>> data = stop.getReachableAt();
-        assertTrue(data.getFirst().isEmpty() && data.getSecond().isEmpty());
+        Pair<Time, Optional<LineName>> data = stop.getReachableAt();
+        assertTrue(data.getFirst().equals(new Time(Long.MAX_VALUE)) && data.getSecond().isEmpty());
+    }
 
+    @Test
+    public void updateReachableTest() {
         stop.updateReachableAt(new Time(20), new LineName("L5"));
+        Pair<Time, Optional<LineName>> data = stop.getReachableAt();
+        assertTrue(data.getSecond().isPresent());
+        assertEquals(data.getFirst(), new Time(20));
+        assertEquals(data.getSecond().get(), new LineName("L5"));
+
+        stop.updateReachableAt(new Time(30), new LineName("L2"));
         data = stop.getReachableAt();
-        assertTrue(data.getFirst().isPresent() && data.getSecond().isPresent());
-        assertEquals(data.getFirst().get(), new Time(20));
+        assertTrue(data.getSecond().isPresent());
+        assertEquals(data.getFirst(), new Time(20));
+        assertEquals(data.getSecond().get(), new LineName("L5"));
+
+        stop.updateReachableAt(new Time(20), new LineName("L3"));
+        data = stop.getReachableAt();
+        assertTrue(data.getSecond().isPresent());
+        assertEquals(data.getFirst(), new Time(20));
         assertEquals(data.getSecond().get(), new LineName("L5"));
     }
 }

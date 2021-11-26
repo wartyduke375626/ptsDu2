@@ -9,7 +9,7 @@ import java.util.*;
 public class Stops implements StopsInterface {
 
     private final FactoryInterface factory;
-    private final Map<StopName, StopInterface> stops = new HashMap<>();
+    private Map<StopName, StopInterface> stops = new HashMap<>();
 
     public Stops(FactoryInterface factory) {
         this.factory = factory;
@@ -25,10 +25,10 @@ public class Stops implements StopsInterface {
     public Optional<Pair<StopName, Time>> earliestReachableStopAfter(Time time) {
         Optional<Pair<StopName, Time>> result = Optional.empty();
         for (StopName stop : stops.keySet()) {
-            Pair<Optional<Time>, Optional<LineName>> data = stops.get(stop).getReachableAt();
-            if (data.getFirst().isEmpty()) continue;
+            Pair<Time, Optional<LineName>> data = stops.get(stop).getReachableAt();
+            if (data.getFirst().equals(new Time(Long.MAX_VALUE))) continue;
 
-            Time reachable = data.getFirst().get();
+            Time reachable = data.getFirst();
             if (time.compareTo(reachable) < 0) {
                 if (result.isEmpty()) result = Optional.of(new Pair<>(stop, reachable));
                 else if (reachable.compareTo(result.get().getSecond()) < 0) result = Optional.of(new Pair<>(stop, reachable));
@@ -56,8 +56,13 @@ public class Stops implements StopsInterface {
     }
 
     @Override
-    public Pair<Optional<Time>, Optional<LineName>> getReachableAt(StopName stop) {
+    public Pair<Time, Optional<LineName>> getReachableAt(StopName stop) {
         if (!stops.containsKey(stop)) throw new NoSuchElementException("Stop has not been loaded yet.");
         return stops.get(stop).getReachableAt();
+    }
+
+    @Override
+    public void clean() {
+        stops = new HashMap<>();
     }
 }

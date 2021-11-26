@@ -36,8 +36,8 @@ public class StopsTest {
                     }
 
                     @Override
-                    public Pair<Optional<Time>, Optional<LineName>> getReachableAt() {
-                        return new Pair<>(Optional.of(factoryStops.get(stopName)), Optional.empty());
+                    public Pair<Time, Optional<LineName>> getReachableAt() {
+                        return new Pair<>(factoryStops.get(stopName), Optional.empty());
                     }
 
                     @Override

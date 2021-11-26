@@ -20,18 +20,18 @@ public class LineSegmentTest {
     private final int capacity = 1;
     private final LineName lineName = new LineName("L1");
     private final List<Time> startingTimes = List.of(new Time(10), new Time(20), new Time(30));
-    private Pair<Optional<Time>, Optional<LineName>> nextStopData = new Pair<>(Optional.empty(), Optional.empty());
+    private Pair<Time, Optional<LineName>> nextStopData = new Pair<>(new Time(Long.MAX_VALUE), Optional.empty());
 
     @Before
     public void setUp() {
         nextStop = new StopInterface() {
             @Override
             public void updateReachableAt(Time time, LineName line) {
-                nextStopData = new Pair<>(Optional.ofNullable(time), Optional.ofNullable(line));
+                nextStopData = new Pair<>(time, Optional.ofNullable(line));
             }
 
             @Override
-            public Pair<Optional<Time>, Optional<LineName>> getReachableAt() {
+            public Pair<Time, Optional<LineName>> getReachableAt() {
                 return nextStopData;
             }
 
@@ -61,8 +61,8 @@ public class LineSegmentTest {
         assertEquals(data.getFirst(), new Time(20));
         assertEquals(data.getSecond(), new StopName("Stop A"));
         assertTrue(data.getThird());
-        assertTrue(nextStopData.getFirst().isPresent() && nextStopData.getSecond().isPresent());
-        assertEquals(nextStopData.getFirst().get(), new Time(20));
+        assertTrue(nextStopData.getSecond().isPresent());
+        assertEquals(nextStopData.getFirst(), new Time(20));
         assertEquals(nextStopData.getSecond().get(), new LineName("L1"));
     }
 
@@ -72,6 +72,6 @@ public class LineSegmentTest {
         assertThrows(IllegalArgumentException.class, () -> lineSegment.incrementCapacity(new Time(10)));
         Triplet<Time, StopName, Boolean> data = lineSegment.nextStopAndUpdateReachable(new Time(10));
         assertFalse(data.getThird());
-        assertTrue(nextStopData.getFirst().isEmpty() && nextStopData.getSecond().isEmpty());
+        assertTrue(nextStopData.getFirst().equals(new Time(Long.MAX_VALUE)) && nextStopData.getSecond().isEmpty());
     }
 }
