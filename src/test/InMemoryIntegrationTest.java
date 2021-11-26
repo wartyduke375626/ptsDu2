@@ -75,7 +75,7 @@ public class InMemoryIntegrationTest {
 
     @Test
     public void searchTest() {
-        ConnectionData data = connectionSearch.search(new StopName("Stop E"), new StopName("Stop F"), new Time(64));
+        ConnectionData data = connectionSearch.search(new StopName("Stop A"), new StopName("Stop D"), new Time(0));
         System.out.println(data);
     }
 }

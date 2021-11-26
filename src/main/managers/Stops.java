@@ -16,19 +16,25 @@ public class Stops implements StopsInterface {
     }
 
     @Override
-    public Optional<Pair<StopName, Time>> earliestReachableStopAfter(Time time) {
-        Optional<Pair<StopName, Time>> result = Optional.empty();
+    public Optional<Pair<List<StopName>, Time>> earliestReachableStopAfter(Time time) {
+        Time min = new Time(Long.MAX_VALUE);
         for (StopName stop : stops.keySet()) {
             Pair<Time, Optional<LineName>> data = stops.get(stop).getReachableAt();
             if (data.getFirst().equals(new Time(Long.MAX_VALUE))) continue;
 
             Time reachable = data.getFirst();
             if (time.compareTo(reachable) < 0) {
-                if (result.isEmpty()) result = Optional.of(new Pair<>(stop, reachable));
-                else if (reachable.compareTo(result.get().getSecond()) < 0) result = Optional.of(new Pair<>(stop, reachable));
+                if (reachable.compareTo(min) < 0) min = reachable;
             }
         }
-        return result;
+
+        if (min.equals(new Time(Long.MAX_VALUE))) return Optional.empty();
+        List<StopName> earliestReachableStops = new ArrayList<>();
+        for (StopName stop : stops.keySet()) {
+            Pair<Time, Optional<LineName>> data = stops.get(stop).getReachableAt();
+            if (data.getFirst().equals(min)) earliestReachableStops.add(stop);
+        }
+        return Optional.of(new Pair<>(earliestReachableStops, min));
     }
 
     @Override

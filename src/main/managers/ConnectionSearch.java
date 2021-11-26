@@ -2,9 +2,7 @@ package managers;
 
 import dataTypes.*;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 public class ConnectionSearch {
 
@@ -20,17 +18,20 @@ public class ConnectionSearch {
         ConnectionData result = new ConnectionData(from);
         stops.setStartingStop(from, time);
 
-        StopName tmpStop = from;
-        Time tmpTime = time;
-        while (!tmpStop.equals(to)) {
-            List<LineName> stopLines = stops.getLines(tmpStop);
-            lines.updateReachable(stopLines, tmpStop, time);
-            Optional<Pair<StopName, Time>> data = stops.earliestReachableStopAfter(tmpTime);
+        List<StopName> earliestStops = new ArrayList<>(List.of(from));
+        while (!earliestStops.contains(to)) {
+            while (!earliestStops.isEmpty()) {
+                StopName tmpStop = earliestStops.remove(earliestStops.size()-1);
+                List<LineName> stopLines = stops.getLines(tmpStop);
+                lines.updateReachable(stopLines, tmpStop, time);
+            }
+            Optional<Pair<List<StopName>, Time>> data = stops.earliestReachableStopAfter(time);
             if (data.isEmpty()) throw new NoSuchElementException("No connection found.");
-            tmpStop = data.get().getFirst();
-            tmpTime = data.get().getSecond();
+            earliestStops.addAll(data.get().getFirst());
+            time = data.get().getSecond();
         }
 
+        StopName tmpStop = to;
         while (!tmpStop.equals(from)) {
             Pair<Time, Optional<LineName>> data = stops.getReachableAt(tmpStop);
             if (data.getSecond().isEmpty()) throw new NullPointerException("A stop other than starting stop was not reached by line.");

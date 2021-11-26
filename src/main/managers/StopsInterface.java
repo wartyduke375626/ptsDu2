@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface StopsInterface {
 
-    Optional<Pair<StopName, Time>> earliestReachableStopAfter(Time time);
+    Optional<Pair<List<StopName>, Time>> earliestReachableStopAfter(Time time);
 
     void setStartingStop(StopName stop, Time time);
 
