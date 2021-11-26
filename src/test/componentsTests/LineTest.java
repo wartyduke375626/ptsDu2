@@ -23,12 +23,12 @@ public class LineTest {
     private final TimeDiff lineSegmentsTimeDiff = new TimeDiff(10);
     private final List<LineSegmentInterface> lineSegments = new ArrayList<>();
 
-    private  List<Pair<Optional<Time>, Optional<LineName>>> stopsData;
+    private  List<Pair<Time, Optional<LineName>>> stopsData;
     private List<Boolean> lineSegmentCapacityUpdated;
 
     private void resetStopsData() {
         stopsData = new ArrayList<>();
-        for (int i=0; i<nextStops.size()+1; i++) stopsData.add(new Pair<>(Optional.empty(), Optional.empty()));
+        for (int i=0; i<nextStops.size()+1; i++) stopsData.add(new Pair<>(new Time(Long.MAX_VALUE), Optional.empty()));
     }
 
     private void resetLineSegmentCapacityUpdated() {
@@ -50,7 +50,7 @@ public class LineTest {
                 @Override
                 public Triplet<Time, StopName, Boolean> nextStopAndUpdateReachable(Time startTime) {
                     Time time = new Time(startTime.getTime() + lineSegmentsTimeDiff.getTime());
-                    stopsData.set(finalI+1, new Pair<>(Optional.of(time), Optional.of(lineName)));
+                    stopsData.set(finalI+1, new Pair<>(time, Optional.of(lineName)));
                     return new Triplet<>(time, nextStops.get(finalI), true);
                 }
 
@@ -67,28 +67,28 @@ public class LineTest {
     public void updateReachableTest() {
         resetStopsData();
         line.updateReachable(new Time(0), new StopName("Stop A"));
-        assertTrue(stopsData.get(0).getFirst().isEmpty() && stopsData.get(0).getSecond().isEmpty());
-        assertTrue(stopsData.get(1).getFirst().isPresent() && stopsData.get(1).getSecond().isPresent());
-        assertEquals(stopsData.get(1).getFirst().get(), new Time(20));
+        assertTrue(stopsData.get(0).getFirst().equals(new Time(Long.MAX_VALUE)) && stopsData.get(0).getSecond().isEmpty());
+        assertTrue(stopsData.get(1).getSecond().isPresent());
+        assertEquals(stopsData.get(1).getFirst(), new Time(20));
         assertEquals(stopsData.get(1).getSecond().get(), new LineName("L1"));
-        assertTrue(stopsData.get(2).getFirst().isPresent() && stopsData.get(2).getSecond().isPresent());
-        assertEquals(stopsData.get(2).getFirst().get(), new Time(30));
+        assertTrue(stopsData.get(2).getSecond().isPresent());
+        assertEquals(stopsData.get(2).getFirst(), new Time(30));
         assertEquals(stopsData.get(2).getSecond().get(), new LineName("L1"));
 
         resetStopsData();
         line.updateReachable(new Time(15), new StopName("Stop B"));
-        assertTrue(stopsData.get(0).getFirst().isEmpty() && stopsData.get(0).getSecond().isEmpty());
-        assertTrue(stopsData.get(1).getFirst().isEmpty() && stopsData.get(1).getSecond().isEmpty());
-        assertTrue(stopsData.get(2).getFirst().isPresent() && stopsData.get(2).getSecond().isPresent());
-        assertEquals(stopsData.get(2).getFirst().get(), new Time(30));
+        assertTrue(stopsData.get(0).getFirst().equals(new Time(Long.MAX_VALUE)) && stopsData.get(0).getSecond().isEmpty());
+        assertTrue(stopsData.get(1).getFirst().equals(new Time(Long.MAX_VALUE)) && stopsData.get(1).getSecond().isEmpty());
+        assertTrue(stopsData.get(2).getSecond().isPresent());
+        assertEquals(stopsData.get(2).getFirst(), new Time(30));
         assertEquals(stopsData.get(2).getSecond().get(), new LineName("L1"));
 
         resetStopsData();
         line.updateReachable(new Time(25), new StopName("Stop B"));
-        assertTrue(stopsData.get(0).getFirst().isEmpty() && stopsData.get(0).getSecond().isEmpty());
-        assertTrue(stopsData.get(1).getFirst().isEmpty() && stopsData.get(1).getSecond().isEmpty());
-        assertTrue(stopsData.get(2).getFirst().isPresent() && stopsData.get(2).getSecond().isPresent());
-        assertEquals(stopsData.get(2).getFirst().get(), new Time(40));
+        assertTrue(stopsData.get(0).getFirst().equals(new Time(Long.MAX_VALUE)) && stopsData.get(0).getSecond().isEmpty());
+        assertTrue(stopsData.get(1).getFirst().equals(new Time(Long.MAX_VALUE)) && stopsData.get(1).getSecond().isEmpty());
+        assertTrue(stopsData.get(2).getSecond().isPresent());
+        assertEquals(stopsData.get(2).getFirst(), new Time(40));
         assertEquals(stopsData.get(2).getSecond().get(), new LineName("L1"));
     }
 

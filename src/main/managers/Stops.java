@@ -15,12 +15,6 @@ public class Stops implements StopsInterface {
         this.factory = factory;
     }
 
-    private void loadStop(StopName stop) {
-        Optional<StopInterface> newStop = factory.createStop(stop);
-        if (newStop.isEmpty()) throw new NoSuchElementException("No such stop in database.");
-        stops.put(stop, newStop.get());
-    }
-
     @Override
     public Optional<Pair<StopName, Time>> earliestReachableStopAfter(Time time) {
         Optional<Pair<StopName, Time>> result = Optional.empty();
@@ -50,14 +44,27 @@ public class Stops implements StopsInterface {
     }
 
     @Override
+    public void loadStop(StopName stop) {
+        if (stops.containsKey(stop)) throw new IllegalStateException("Stop has already been loaded.");
+        Optional<StopInterface> newStop = factory.createStop(stop);
+        if (newStop.isEmpty()) throw new NoSuchElementException("No such stop in database.");
+        stops.put(stop, newStop.get());
+    }
+
+    @Override
+    public boolean isLoaded(StopName stop) {
+        return stops.containsKey(stop);
+    }
+
+    @Override
     public StopInterface getStop(StopName stop) {
-        if (!stops.containsKey(stop)) loadStop(stop);
+        if (!stops.containsKey(stop)) throw new NoSuchElementException("Stop has not been loaded yet.");
         return stops.get(stop);
     }
 
     @Override
     public Pair<Time, Optional<LineName>> getReachableAt(StopName stop) {
-        if (!stops.containsKey(stop)) throw new NoSuchElementException("Stop has not been loaded yet.");
+        if (!stops.containsKey(stop)) throw new IllegalStateException("Stop has not been loaded yet.");
         return stops.get(stop).getReachableAt();
     }
 

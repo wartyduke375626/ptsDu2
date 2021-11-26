@@ -14,6 +14,10 @@ public interface StopsInterface {
 
     List<LineName> getLines(StopName stop);
 
+    void loadStop(StopName stop);
+
+    boolean isLoaded(StopName stop);
+
     StopInterface getStop(StopName stop);
 
     Pair<Time, Optional<LineName>> getReachableAt(StopName stop);

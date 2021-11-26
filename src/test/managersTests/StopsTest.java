@@ -63,8 +63,8 @@ public class StopsTest {
     @Test
     public void earliestReachableStopAfterTest() {
         assertTrue(stops.earliestReachableStopAfter(new Time(10)).isEmpty());
-        stops.getStop(new StopName("Stop A"));
-        stops.getStop(new StopName("Stop B"));
+        stops.loadStop(new StopName("Stop A"));
+        stops.loadStop(new StopName("Stop B"));
 
         Optional<Pair<StopName, Time>> tmp = stops.earliestReachableStopAfter(new Time(5));
         assertTrue(tmp.isPresent());
@@ -79,7 +79,7 @@ public class StopsTest {
         assertEquals(data.getSecond(), new Time(20));
 
         assertTrue(stops.earliestReachableStopAfter(new Time(22)).isEmpty());
-        stops.getStop(new StopName("Stop C"));
+        stops.loadStop(new StopName("Stop C"));
 
         tmp = stops.earliestReachableStopAfter(new Time(22));
         assertTrue(tmp.isPresent());
@@ -87,6 +87,7 @@ public class StopsTest {
         assertEquals(data.getFirst(), new StopName("Stop C"));
         assertEquals(data.getSecond(), new Time(30));
 
+        assertThrows(NoSuchElementException.class, () -> stops.loadStop(new StopName("Stop D")));
         assertThrows(NoSuchElementException.class, () -> stops.getStop(new StopName("Stop D")));
     }
 }
