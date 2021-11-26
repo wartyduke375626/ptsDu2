@@ -21,7 +21,8 @@ public class StopsTest {
     private final Map<StopName, Time> factoryStops = Map.of(
             new StopName("Stop A"), new Time(10),
             new StopName("Stop B"), new Time(20),
-            new StopName("Stop C"), new Time(30));
+            new StopName("Stop C"), new Time(30)
+    );
 
     @Before
     public void setUp() {
