@@ -6,6 +6,7 @@ import dataTypes.*;
 
 import factories.FactoryInterface;
 import managers.Lines;
+import managers.StopsInterface;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,6 +29,10 @@ public class LinesTest {
     @Before
     public void setUp() {
         factory = new FactoryInterface() {
+            @Override
+            public void setStops(StopsInterface stops) {
+            }
+
             @Override
             public Optional<StopInterface> createStop(StopName stopName) {
                 return Optional.empty();

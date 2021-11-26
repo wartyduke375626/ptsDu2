@@ -66,20 +66,24 @@ public class Line implements LineInterface {
     @Override
     public StopName updateCapacityAndGetPreviousStop(StopName stop, Time time) {
         if (stop.equals(firstStop)) throw new NoSuchElementException("No previous stop in line.");
-        int i = 0;
         StopName nextStop = firstStop;
         StopName previousStop;
         Time startTime = startingTimes.get(0);
+        TimeDiff lastTimeDiff;
+
+        int i = 0;
         do {
             if (i >= lineSegments.size()) throw new NoSuchElementException("No such stop in lineSegments");
             Pair<Time, StopName> data = lineSegments.get(i).nextStop(startTime);
+            lastTimeDiff = new TimeDiff(data.getFirst().getTime() - startTime.getTime());
             startTime = data.getFirst();
             previousStop = nextStop;
             nextStop = data.getSecond();
             i++;
         } while (!nextStop.equals(stop));
 
-        lineSegments.get(--i).incrementCapacity(time);
+        Time bus = new Time(time.getTime() - lastTimeDiff.getTime());
+        lineSegments.get(--i).incrementCapacity(bus);
         return previousStop;
     }
 }

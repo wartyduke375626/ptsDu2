@@ -95,7 +95,7 @@ public class LineTest {
     @Test
     public void updateCapacityAndGetPreviousStopTest() {
         resetLineSegmentCapacityUpdated();
-        StopName stop = line.updateCapacityAndGetPreviousStop(new StopName("Stop B"), new Time(0));
+        StopName stop = line.updateCapacityAndGetPreviousStop(new StopName("Stop B"), new Time(10));
         assertEquals(stop, new StopName("Stop A"));
         assertTrue(lineSegmentCapacityUpdated.get(0));
     }

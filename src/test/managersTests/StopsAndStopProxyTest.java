@@ -8,6 +8,7 @@ import dataTypes.*;
 import factories.FactoryInterface;
 import managers.Stops;
 
+import managers.StopsInterface;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,6 +30,11 @@ public class StopsAndStopProxyTest {
     @Before
     public void setUp() {
         factory = new FactoryInterface() {
+            @Override
+            public void setStops(StopsInterface stops) {
+
+            }
+
             @Override
             public Optional<StopInterface> createStop(StopName stop) {
                 if (!stopName.equals(stop)) return Optional.empty();

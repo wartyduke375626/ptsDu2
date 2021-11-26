@@ -24,7 +24,7 @@ public class InMemoryFactory implements FactoryInterface {
         this.inMemoryLines = Collections.unmodifiableMap(inMemoryLines);
         this.inMemoryLineSegments = Collections.unmodifiableMap(inMemoryLineSegments);
     }
-
+    @Override
     public void setStops(StopsInterface stops) {
         this.stops = stops;
     }
