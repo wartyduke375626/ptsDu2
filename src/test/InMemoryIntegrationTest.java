@@ -1,5 +1,7 @@
 import dataTypes.*;
 
+import dataTypes.tuples.Pair;
+import dataTypes.tuples.Triplet;
 import factories.FactoryInterface;
 import factories.InMemoryFactory;
 import managers.*;

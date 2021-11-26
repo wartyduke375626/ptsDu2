@@ -1,6 +1,8 @@
 package managers;
 
 import dataTypes.*;
+import dataTypes.tuples.Pair;
+import dataTypes.tuples.Triplet;
 
 import java.util.*;
 
@@ -15,7 +17,6 @@ public class ConnectionSearch {
     }
 
     public ConnectionData search(StopName from, StopName to, Time time) {
-        ConnectionData result = new ConnectionData(from);
         stops.setStartingStop(from, time);
 
         List<StopName> earliestStops = new ArrayList<>(List.of(from));
@@ -31,12 +32,15 @@ public class ConnectionSearch {
             time = data.get().getSecond();
         }
 
+        ConnectionData result = new ConnectionData();
         StopName tmpStop = to;
+        result.setLastStop(tmpStop);
         while (!tmpStop.equals(from)) {
             Pair<Time, Optional<LineName>> data = stops.getReachableAt(tmpStop);
             if (data.getSecond().isEmpty()) throw new NullPointerException("A stop other than starting stop was not reached by line.");
-            result.addTravelSegment(data.getSecond().get(), tmpStop, data.getFirst());
-            tmpStop = lines.updateCapacityAndGetPreviousStop(data.getSecond().get(), tmpStop, data.getFirst());
+            Triplet<StopName, Time, TimeDiff> resultData = lines.updateCapacityAndGetPreviousStop(data.getSecond().get(), tmpStop, data.getFirst());
+            result.addTravelSegment(data.getSecond().get(), resultData.getFirst(), resultData.getSecond(), resultData.getThird());
+            tmpStop = resultData.getFirst();
         }
 
         return result;

@@ -2,6 +2,7 @@ package managers;
 
 import components.LineInterface;
 import dataTypes.*;
+import dataTypes.tuples.Triplet;
 import factories.FactoryInterface;
 
 import java.util.*;
@@ -31,7 +32,7 @@ public class Lines implements LinesInterface {
     }
 
     @Override
-    public StopName updateCapacityAndGetPreviousStop(LineName line, StopName stop, Time time) {
+    public Triplet<StopName, Time, TimeDiff> updateCapacityAndGetPreviousStop(LineName line, StopName stop, Time time) {
         if (!lines.containsKey(line)) throw new NoSuchElementException("Line has not been loaded yet.");
         return lines.get(line).updateCapacityAndGetPreviousStop(stop, time);
     }

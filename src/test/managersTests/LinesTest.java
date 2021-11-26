@@ -4,6 +4,8 @@ import components.LineInterface;
 import components.StopInterface;
 import dataTypes.*;
 
+import dataTypes.tuples.Pair;
+import dataTypes.tuples.Triplet;
 import factories.FactoryInterface;
 import managers.Lines;
 import managers.StopsInterface;
@@ -53,10 +55,14 @@ public class LinesTest {
                     }
 
                     @Override
-                    public StopName updateCapacityAndGetPreviousStop(StopName stop, Time time) {
+                    public Triplet<StopName, Time, TimeDiff> updateCapacityAndGetPreviousStop(StopName stop, Time time) {
                         for (int i=0; i<lineStops.size(); i++) {
                             Pair<StopName, Time> data = lineStops.get(i);
-                            if (data.getFirst().equals(stop)) return lineStops.get(i-1).getFirst();
+                            if (data.getFirst().equals(stop)) return new Triplet<>(
+                                    lineStops.get(i-1).getFirst(),
+                                    new Time(Long.MAX_VALUE - timeDiff.getTime()),
+                                    timeDiff
+                            );
                         }
                         return null;
                     }
@@ -81,8 +87,10 @@ public class LinesTest {
         assertThrows(NoSuchElementException.class, () -> lines.updateCapacityAndGetPreviousStop(lineName, new StopName("Stop B"), new Time(10)));
         lines.updateReachable(List.of(new LineName("L1")), new StopName("Stop A"), new Time(0));
 
-        StopName stopName = lines.updateCapacityAndGetPreviousStop(lineName, new StopName("Stop B"), new Time(10));
-        assertEquals(stopName, new StopName("Stop A"));
+        Triplet<StopName, Time, TimeDiff> data = lines.updateCapacityAndGetPreviousStop(lineName, new StopName("Stop B"), new Time(10));
+        assertEquals(data.getFirst(), new StopName("Stop A"));
+        assertEquals(data.getSecond(), new Time(Long.MAX_VALUE - timeDiff.getTime()));
+        assertEquals(data.getThird(), timeDiff);
 
         assertThrows(IndexOutOfBoundsException.class, () -> lines.updateCapacityAndGetPreviousStop(lineName, new StopName("Stop A"), new Time(0)));
     }

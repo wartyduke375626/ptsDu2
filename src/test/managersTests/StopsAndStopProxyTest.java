@@ -5,6 +5,7 @@ import components.StopInterface;
 import components.StopProxy;
 import dataTypes.*;
 
+import dataTypes.tuples.Pair;
 import factories.FactoryInterface;
 import managers.Stops;
 

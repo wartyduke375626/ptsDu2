@@ -1,6 +1,7 @@
 package components;
 
 import dataTypes.*;
+import dataTypes.tuples.Pair;
 
 import java.util.Collections;
 import java.util.List;

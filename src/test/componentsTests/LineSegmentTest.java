@@ -4,6 +4,8 @@ import components.LineSegment;
 import components.StopInterface;
 import dataTypes.*;
 
+import dataTypes.tuples.Pair;
+import dataTypes.tuples.Triplet;
 import org.junit.Before;
 import org.junit.Test;
 

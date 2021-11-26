@@ -1,6 +1,8 @@
 package components;
 
 import dataTypes.*;
+import dataTypes.tuples.Pair;
+import dataTypes.tuples.Triplet;
 
 import java.util.Collections;
 import java.util.List;
@@ -64,7 +66,7 @@ public class Line implements LineInterface {
     }
 
     @Override
-    public StopName updateCapacityAndGetPreviousStop(StopName stop, Time time) {
+    public Triplet<StopName, Time, TimeDiff> updateCapacityAndGetPreviousStop(StopName stop, Time time) {
         if (stop.equals(firstStop)) throw new NoSuchElementException("No previous stop in line.");
         StopName nextStop = firstStop;
         StopName previousStop;
@@ -84,6 +86,6 @@ public class Line implements LineInterface {
 
         Time bus = new Time(time.getTime() - lastTimeDiff.getTime());
         lineSegments.get(--i).incrementCapacity(bus);
-        return previousStop;
+        return new Triplet<>(previousStop, bus, lastTimeDiff);
     }
 }

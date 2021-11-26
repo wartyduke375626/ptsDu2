@@ -1,6 +1,8 @@
 package components;
 
 import dataTypes.*;
+import dataTypes.tuples.Pair;
+import dataTypes.tuples.Triplet;
 
 import java.util.HashMap;
 import java.util.List;

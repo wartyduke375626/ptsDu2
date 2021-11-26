@@ -1,4 +1,4 @@
-package dataTypes;
+package dataTypes.tuples;
 
 import java.util.Objects;
 

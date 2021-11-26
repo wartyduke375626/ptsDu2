@@ -4,6 +4,8 @@ import components.Line;
 import components.LineSegmentInterface;
 import dataTypes.*;
 
+import dataTypes.tuples.Pair;
+import dataTypes.tuples.Triplet;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -95,8 +97,10 @@ public class LineTest {
     @Test
     public void updateCapacityAndGetPreviousStopTest() {
         resetLineSegmentCapacityUpdated();
-        StopName stop = line.updateCapacityAndGetPreviousStop(new StopName("Stop B"), new Time(10));
-        assertEquals(stop, new StopName("Stop A"));
+        Triplet<StopName, Time, TimeDiff> data = line.updateCapacityAndGetPreviousStop(new StopName("Stop B"), new Time(10));
+        assertEquals(data.getFirst(), new StopName("Stop A"));
+        assertEquals(data.getSecond(), new Time(0));
+        assertEquals(data.getThird(), new TimeDiff(10));
         assertTrue(lineSegmentCapacityUpdated.get(0));
     }
 }

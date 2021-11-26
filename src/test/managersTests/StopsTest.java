@@ -4,6 +4,7 @@ import components.LineInterface;
 import components.StopInterface;
 import dataTypes.*;
 
+import dataTypes.tuples.Pair;
 import factories.FactoryInterface;
 import managers.Stops;
 

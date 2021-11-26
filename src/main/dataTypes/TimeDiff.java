@@ -27,4 +27,9 @@ public class TimeDiff {
     public long getTime() {
         return time;
     }
+
+    @Override
+    public String toString() {
+        return Long.toString(time);
+    }
 }

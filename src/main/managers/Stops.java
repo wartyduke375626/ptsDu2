@@ -2,6 +2,7 @@ package managers;
 
 import components.StopInterface;
 import dataTypes.*;
+import dataTypes.tuples.Pair;
 import factories.FactoryInterface;
 
 import java.util.*;

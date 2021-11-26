@@ -1,6 +1,7 @@
 package components;
 
 import dataTypes.*;
+import dataTypes.tuples.Pair;
 import managers.StopsInterface;
 
 import java.util.Collections;

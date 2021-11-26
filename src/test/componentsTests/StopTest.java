@@ -3,6 +3,7 @@ package componentsTests;
 import components.Stop;
 import dataTypes.*;
 
+import dataTypes.tuples.Pair;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -3,6 +3,8 @@ package factoriesTests;
 import components.LineInterface;
 import components.StopInterface;
 import dataTypes.*;
+import dataTypes.tuples.Pair;
+import dataTypes.tuples.Triplet;
 import factories.InMemoryFactory;
 
 import java.util.*;
