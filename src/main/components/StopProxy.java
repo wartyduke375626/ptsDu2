@@ -4,6 +4,7 @@ import dataTypes.*;
 import dataTypes.tuples.Pair;
 import managers.StopsInterface;
 
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -23,7 +24,7 @@ public class StopProxy implements StopInterface {
     }
 
     @Override
-    public void updateReachableAt(Time time, LineName line) {
+    public void updateReachableAt(Time time, LineName line) throws SQLException {
         if (!stops.isLoaded(stopName)) {
             stops.loadStop(stopName);
             stop = stops.getStop(stopName);

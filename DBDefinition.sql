@@ -39,6 +39,7 @@ CREATE TABLE bus(
 	startTime INTEGER NOT NULL,
 	capacity INTEGER NOT NULL,
 	UNIQUE (bid, capacity),
+	UNIQUE (lid, startTime),
 	CHECK (startTime >= 0 AND capacity > 0)
 );
 

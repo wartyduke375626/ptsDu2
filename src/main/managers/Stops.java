@@ -5,6 +5,7 @@ import dataTypes.*;
 import dataTypes.tuples.Pair;
 import factories.FactoryInterface;
 
+import java.sql.SQLException;
 import java.util.*;
 
 public class Stops implements StopsInterface {
@@ -39,19 +40,19 @@ public class Stops implements StopsInterface {
     }
 
     @Override
-    public void setStartingStop(StopName stop, Time time) {
+    public void setStartingStop(StopName stop, Time time) throws SQLException {
         if (!stops.containsKey(stop)) loadStop(stop);
         stops.get(stop).updateReachableAt(time, null);
     }
 
     @Override
-    public List<LineName> getLines(StopName stop) {
+    public List<LineName> getLines(StopName stop) throws SQLException {
         if (!stops.containsKey(stop)) loadStop(stop);
         return stops.get(stop).getLines();
     }
 
     @Override
-    public void loadStop(StopName stop) {
+    public void loadStop(StopName stop) throws SQLException {
         if (stops.containsKey(stop)) throw new IllegalStateException("Stop has already been loaded.");
         Optional<StopInterface> newStop = factory.createStop(stop);
         if (newStop.isEmpty()) throw new NoSuchElementException("No such stop in database.");

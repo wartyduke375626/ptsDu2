@@ -13,6 +13,7 @@ import managers.StopsInterface;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.sql.SQLException;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -74,7 +75,7 @@ public class StopsTest {
     }
 
     @Test
-    public void earliestReachableStopAfterTest() {
+    public void earliestReachableStopAfterTest() throws SQLException {
         assertTrue(stops.earliestReachableStopAfter(new Time(10)).isEmpty());
         stops.loadStop(new StopName("Stop A"));
         stops.loadStop(new StopName("Stop B"));

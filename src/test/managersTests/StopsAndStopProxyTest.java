@@ -14,6 +14,7 @@ import managers.StopsInterface;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,7 +90,7 @@ public class StopsAndStopProxyTest {
     }
 
     @Test
-    public void updateReachableTest() {
+    public void updateReachableTest() throws SQLException {
         stopProxy.updateReachableAt(new Time(10), new LineName("L5"));
         assertTrue(stops.isLoaded(stopName));
         Pair<Time, Optional<LineName>> data = stopProxy.getReachableAt();

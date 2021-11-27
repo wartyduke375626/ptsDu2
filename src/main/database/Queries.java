@@ -2,6 +2,8 @@ package database;
 
 import dataTypes.LineName;
 import dataTypes.StopName;
+import dataTypes.Time;
+import dataTypes.TimeDiff;
 
 public class Queries {
 
@@ -23,16 +25,18 @@ public class Queries {
                 "WHERE l.id = " + lid;
     }
 
-    public static String getBusesDataAndBidsQuery(int lid) {
+    public static String getBusesDataAndBidsQuery(LineName lineName, Time time, TimeDiff maxStartTimeDifference) {
         return "SELECT b.startTime, b.capacity, b.bid\n" +
-                "FROM bus b\n" +
-                "WHERE b.lid = " + lid;
+                "FROM line l, bus b\n" +
+                "WHERE l.lname = '" + lineName.toString() + "' AND b.lid = l.lid AND " +
+                "b.startTime <= " + (time.getTime()+maxStartTimeDifference.getTime()) + " AND " +
+                "b.startTime >= " + (time.getTime()-maxStartTimeDifference.getTime());
     }
-
 
     public static String getBusSegmentsPassengersQuery(int bid) {
         return "SELECT bs.passengers, ls.sIndex\n" +
                 "FROM busSegment bs, lineSegment ls\n" +
                 "WHERE bs.bid = " + bid + " AND ls.lsid = bs.lsid";
     }
+
 }

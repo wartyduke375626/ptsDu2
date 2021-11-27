@@ -8,6 +8,7 @@ import dataTypes.tuples.Pair;
 import dataTypes.tuples.Triplet;
 import factories.InMemoryFactory;
 
+import java.sql.SQLException;
 import java.util.*;
 
 import managers.Stops;
@@ -88,7 +89,7 @@ public class InMemoryFactoryTest {
     }
 
     @Test
-    public void createLineTest() {
+    public void createLineTest() throws SQLException {
         Optional<LineInterface> data = inMemoryFactory.createLine(new LineName("L1"), new Time(0));
         assertTrue(data.isPresent());
         LineInterface line = data.get();

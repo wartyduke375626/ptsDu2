@@ -9,6 +9,7 @@ import dataTypes.tuples.Triplet;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -82,7 +83,7 @@ public class LineTest {
     }
 
     @Test
-    public void updateReachableTest() {
+    public void updateReachableTest() throws SQLException {
         resetStopsData();
         line.updateReachable(new Time(0), new StopName("Stop A"));
         assertTrue(stopsData.get(0).getFirst().equals(new Time(Long.MAX_VALUE)) && stopsData.get(0).getSecond().isEmpty());

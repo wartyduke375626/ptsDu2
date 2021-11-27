@@ -60,7 +60,33 @@ public class Database implements DatabaseInterface {
     }
 
     @Override
-    public Optional<Map<Time, Pair<Integer, List<Integer>>>> getBussesAndPassengers(LineName lineName, Time time) {
-        return Optional.empty();
+    public Optional<Map<Time, Pair<Integer, List<Pair<Integer, Integer>>>>> getBussesAndPassengers(LineName lineName, Time time, TimeDiff maxStartTimeDifference) throws SQLException {
+        try (Connection connection = DriverManager.getConnection(databaseUrl)) {
+            System.out.println("Connection to SQLite has been established.");
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(Queries.getBusesDataAndBidsQuery(lineName, time, maxStartTimeDifference));
+
+            List<Triplet<Integer, Time, Integer>> buses = new ArrayList<>();
+            while (resultSet.next()) {
+                int bid = resultSet.getInt("bid");
+                Time startTime = new Time(resultSet.getLong("startTime"));
+                int capacity = resultSet.getInt("capacity");
+                buses.add(new Triplet<>(bid, startTime, capacity));
+            }
+            if (buses.isEmpty()) throw new SQLIntegrityConstraintViolationException("Line with no buses in database.");
+
+            Map<Time, Pair<Integer, List<Pair<Integer, Integer>>>> result = new HashMap<>();
+            for (Triplet<Integer, Time, Integer> busData : buses) {
+                List<Pair<Integer, Integer>> busSegmentsData = new ArrayList<>();
+                resultSet = statement.executeQuery(Queries.getBusSegmentsPassengersQuery(busData.getFirst()));
+                while (resultSet.next()) {
+                    int segmentIndex = resultSet.getInt("sIndex");
+                    int passengers = resultSet.getInt("passengers");
+                    busSegmentsData.add(new Pair<>(segmentIndex, passengers));
+                }
+                result.put(busData.getSecond(), new Pair<>(busData.getThird(), busSegmentsData));
+            }
+            return Optional.of(result);
+        }
     }
 }

@@ -9,6 +9,7 @@ import dataTypes.tuples.Triplet;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -59,7 +60,7 @@ public class LineSegmentTest {
     }
 
     @Test
-    public void nextStopAndUpdateReachableTest() {
+    public void nextStopAndUpdateReachableTest() throws SQLException {
         Triplet<Time, StopName, Boolean> data = lineSegment.nextStopAndUpdateReachable(new Time(10));
         assertEquals(data.getFirst(), new Time(20));
         assertEquals(data.getSecond(), new StopName("Stop A"));
@@ -70,7 +71,7 @@ public class LineSegmentTest {
     }
 
     @Test
-    public void incrementCapacityTest() {
+    public void incrementCapacityTest() throws SQLException {
         lineSegment.incrementCapacity(new Time(10));
         assertThrows(IllegalArgumentException.class, () -> lineSegment.incrementCapacity(new Time(10)));
         Triplet<Time, StopName, Boolean> data = lineSegment.nextStopAndUpdateReachable(new Time(10));

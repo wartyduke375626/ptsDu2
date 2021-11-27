@@ -13,6 +13,7 @@ import managers.StopsInterface;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.sql.SQLException;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -84,7 +85,7 @@ public class LinesTest {
     }
 
     @Test
-    public void updateReachableTest() {
+    public void updateReachableTest() throws SQLException {
         lines.updateReachable(List.of(new LineName("L1")), new StopName("Stop A"), new Time(0));
         for (int i=0; i<lineStops.size(); i++) {
             assertEquals(lineStops.get(i).getSecond(), new Time(i*timeDiff.getTime()));
@@ -94,7 +95,7 @@ public class LinesTest {
     }
 
     @Test
-    public void updateCapacityAndGetPreviousStopTest() {
+    public void updateCapacityAndGetPreviousStopTest() throws SQLException {
         assertThrows(NoSuchElementException.class, () -> lines.updateCapacityAndGetPreviousStop(lineName, new StopName("Stop B"), new Time(10)));
         lines.updateReachable(List.of(new LineName("L1")), new StopName("Stop A"), new Time(0));
 

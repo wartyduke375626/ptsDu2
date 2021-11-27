@@ -6,6 +6,7 @@ import dataTypes.*;
 import dataTypes.tuples.Triplet;
 import factories.FactoryInterface;
 
+import java.sql.SQLException;
 import java.util.*;
 
 public class Lines implements LinesInterface {
@@ -17,7 +18,7 @@ public class Lines implements LinesInterface {
         this.factory = factory;
     }
 
-    private void loadLine(LineName line, Time time) {
+    private void loadLine(LineName line, Time time) throws SQLException {
         if (lines.containsKey(line)) throw new IllegalStateException("Line has already been loaded.");
         Optional<LineInterface> newLine = factory.createLine(line, time);
         if (newLine.isEmpty()) throw new NoSuchElementException("No such line in database.");
@@ -25,7 +26,7 @@ public class Lines implements LinesInterface {
     }
 
     @Override
-    public void updateReachable(List<LineName> lines, StopName stop, Time time) {
+    public void updateReachable(List<LineName> lines, StopName stop, Time time) throws SQLException {
         for (LineName line : lines) {
             if (!this.lines.containsKey(line)) loadLine(line, time);
             this.lines.get(line).updateReachable(time, stop);
@@ -39,7 +40,7 @@ public class Lines implements LinesInterface {
     }
 
     @Override
-    public void clean() {
+    public void clean() throws SQLException {
         List<LineSegmentInterface> modifiedLineSegments = new ArrayList<>();
         for (LineName line : lines.keySet()) {
             List<LineSegmentInterface> lineSegments = lines.get(line).getLineSegments();

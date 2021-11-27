@@ -4,6 +4,7 @@ import dataTypes.*;
 import dataTypes.tuples.Pair;
 import dataTypes.tuples.Triplet;
 
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -26,7 +27,7 @@ public class Line implements LineInterface {
     }
 
     @Override
-    public void updateReachable(Time time, StopName stop) {
+    public void updateReachable(Time time, StopName stop) throws SQLException {
 
         //find starting lineSegment and determine travel time from first stop till starting lineSegment
         StopName nextStop = firstStop;

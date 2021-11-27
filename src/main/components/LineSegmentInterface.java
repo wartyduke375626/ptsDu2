@@ -4,13 +4,14 @@ import dataTypes.*;
 import dataTypes.tuples.Pair;
 import dataTypes.tuples.Triplet;
 
+import java.sql.SQLException;
 import java.util.Map;
 
 public interface LineSegmentInterface {
 
     Pair<Time, StopName> nextStop(Time startTime);
 
-    Triplet<Time, StopName, Boolean> nextStopAndUpdateReachable(Time startTime);
+    Triplet<Time, StopName, Boolean> nextStopAndUpdateReachable(Time startTime) throws SQLException;
 
     LineName getLine();
 
