@@ -2,17 +2,18 @@ package database;
 
 import dataTypes.*;
 import dataTypes.tuples.Pair;
-import dataTypes.tuples.Quadruplet;
+import dataTypes.tuples.Triplet;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 public interface DatabaseInterface {
 
-    Optional<List<LineName>> getStopData(StopName stopName);
+    Optional<List<LineName>> getStopData(StopName stopName) throws SQLException;
 
-    Optional<Pair<StopName, List<Pair<StopName, TimeDiff>>>> getLineFirstStopAndSegmentsData(LineName lineName);
+    Optional<Pair<StopName, List<Triplet<Integer, StopName, TimeDiff>>>> getLineFirstStopAndLineSegmentsData(LineName lineName) throws SQLException;
 
-    Optional<Map<Time, Pair<Integer, List<Integer>>>> getBussesAndPassengers(LineName lineName, Time time);
+    Optional<Map<Time, Pair<Integer, List<Integer>>>> getBussesAndPassengers(LineName lineName, Time time) throws SQLException;
 }

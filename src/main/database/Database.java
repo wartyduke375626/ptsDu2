@@ -1,49 +1,62 @@
 package database;
 
-import dataTypes.*;
 import dataTypes.Time;
 import dataTypes.tuples.Pair;
+import dataTypes.*;
+import dataTypes.tuples.Triplet;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class Database implements DatabaseInterface {
 
-    private String databaseUrl;
-    private static final String query =
-            "SELECT l.lname " +
-            "FROM stop s, line l, stop_line sl " +
-            "WHERE s.sname = ? AND s.sid = sl.sid AND l.lid = sl.lid ";
+    private final String databaseUrl;
 
     public Database(String databasePath) {
         databaseUrl = "jdbc:sqlite:" + databasePath;
     }
 
     @Override
-    public Optional<List<LineName>> getStopData(StopName stopName) {
+    public Optional<List<LineName>> getStopData(StopName stopName) throws SQLException {
         try (Connection connection = DriverManager.getConnection(databaseUrl)) {
             System.out.println("Connection to SQLite has been established.");
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, stopName.toString());
-            ResultSet resultSet = statement.executeQuery();
-            List<LineName> result = new ArrayList<>();
-            while (resultSet.next()) {
-                result.add(new LineName(resultSet.getString("lname")));
-            }
-            return Optional.of(result);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(Queries.getStopLinesQuery(stopName));
 
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            return Optional.empty();
+            List<LineName> stopLines = new ArrayList<>();
+            while (resultSet.next()) {
+                stopLines.add(new LineName(resultSet.getString("lname")));
+            }
+            if (stopLines.isEmpty()) return Optional.empty();
+
+            return Optional.of(stopLines);
         }
     }
 
     @Override
-    public Optional<Pair<StopName, List<Pair<StopName, TimeDiff>>>> getLineFirstStopAndSegmentsData(LineName lineName) {
-        return Optional.empty();
+    public Optional<Pair<StopName, List<Triplet<Integer, StopName, TimeDiff>>>> getLineFirstStopAndLineSegmentsData(LineName lineName) throws SQLException {
+        try (Connection connection = DriverManager.getConnection(databaseUrl)) {
+            System.out.println("Connection to SQLite has been established.");
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(Queries.getLineFirstStopAndLidQuery(lineName));
+            if (!resultSet.next()) return Optional.empty();
+
+            StopName firstStop = new StopName(resultSet.getString("firstStop"));
+            int lid = resultSet.getInt("lid");
+
+            resultSet = statement.executeQuery(Queries.getLineSegmentsDataQuery(lid));
+
+            List<Triplet<Integer, StopName, TimeDiff>> lineSegmentsData = new ArrayList<>();
+            while (resultSet.next()) {
+                int segmentIndex = resultSet.getInt("sIndex");
+                StopName nextStop = new StopName(resultSet.getString("nextStop"));
+                TimeDiff timeDiff = new TimeDiff(resultSet.getLong("timeDiff"));
+                lineSegmentsData.add(new Triplet<>(segmentIndex, nextStop, timeDiff));
+            }
+            if (lineSegmentsData.isEmpty()) throw new SQLIntegrityConstraintViolationException("Line with no line segments in database.");
+
+            return Optional.of(new Pair<>(firstStop, lineSegmentsData));
+        }
     }
 
     @Override
