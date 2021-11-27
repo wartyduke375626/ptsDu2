@@ -3,6 +3,7 @@ package dataTypes;
 import dataTypes.tuples.Quadruplet;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ConnectionData {
@@ -16,6 +17,16 @@ public class ConnectionData {
 
     public void addTravelSegment(LineName lineName, StopName startStop, Time startTime, TimeDiff travelTime) {
         travelSegments.add(new Quadruplet<>(lineName, startStop, startTime, travelTime));
+    }
+
+    public StopName getLastStop() {
+        return lastStop;
+    }
+
+    public List<Quadruplet<LineName, StopName, Time, TimeDiff>> getTravelSegments() {
+        List<Quadruplet<LineName, StopName, Time, TimeDiff>> result = new ArrayList<>(travelSegments);
+        Collections.reverse(result);
+        return result;
     }
 
     @Override

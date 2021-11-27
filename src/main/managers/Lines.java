@@ -1,6 +1,7 @@
 package managers;
 
 import components.LineInterface;
+import components.LineSegmentInterface;
 import dataTypes.*;
 import dataTypes.tuples.Triplet;
 import factories.FactoryInterface;
@@ -39,6 +40,14 @@ public class Lines implements LinesInterface {
 
     @Override
     public void clean() {
+        List<LineSegmentInterface> modifiedLineSegments = new ArrayList<>();
+        for (LineName line : lines.keySet()) {
+            List<LineSegmentInterface> lineSegments = lines.get(line).getLineSegments();
+            for (LineSegmentInterface lineSegment : lineSegments) {
+                if (!lineSegment.getUpdatedBusses().isEmpty()) modifiedLineSegments.add(lineSegment);
+            }
+        }
+        factory.updateDatabase(modifiedLineSegments);
         lines = new HashMap<>();
     }
 }

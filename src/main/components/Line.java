@@ -41,7 +41,7 @@ public class Line implements LineInterface {
         }
         TimeDiff totalTimeDiff = new TimeDiff(tmp.getTime() - startingTimes.get(0).getTime());
 
-        //determine earliest catchable bus at starting lineSegment
+        //determine the earliest catchable bus at starting lineSegment
         Time earliestCatchable = new Time(startingTimes.get(0).getTime() + totalTimeDiff.getTime());
         int earliestCatchableIndex = 0;
         for (int i=1; earliestCatchable.compareTo(time) < 0; i++) {
@@ -87,5 +87,10 @@ public class Line implements LineInterface {
         Time bus = new Time(time.getTime() - lastTimeDiff.getTime());
         lineSegments.get(--i).incrementCapacity(bus);
         return new Triplet<>(previousStop, bus, lastTimeDiff);
+    }
+
+    @Override
+    public List<LineSegmentInterface> getLineSegments() {
+        return lineSegments;
     }
 }

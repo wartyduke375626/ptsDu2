@@ -27,7 +27,7 @@ public class ConnectionSearch {
                 lines.updateReachable(stopLines, tmpStop, time);
             }
             Optional<Pair<List<StopName>, Time>> data = stops.earliestReachableStopAfter(time);
-            if (data.isEmpty()) throw new NoSuchElementException("No connection found.");
+            if (data.isEmpty()) return null;
             earliestStops.addAll(data.get().getFirst());
             time = data.get().getSecond();
         }
@@ -43,6 +43,8 @@ public class ConnectionSearch {
             tmpStop = resultData.getFirst();
         }
 
+        lines.clean();
+        stops.clean();
         return result;
     }
 }

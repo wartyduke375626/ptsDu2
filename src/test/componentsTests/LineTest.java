@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -57,8 +58,23 @@ public class LineTest {
                 }
 
                 @Override
+                public LineName getLine() {
+                    return new LineName("L1");
+                }
+
+                @Override
+                public int getSegmentIndex() {
+                    return finalI;
+                }
+
+                @Override
                 public void incrementCapacity(Time startTime) {
                     lineSegmentCapacityUpdated.set(finalI, true);
+                }
+
+                @Override
+                public Map<Time, Integer> getUpdatedBusses() {
+                    return null;
                 }
             });
         }

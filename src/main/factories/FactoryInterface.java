@@ -4,6 +4,7 @@ import components.*;
 import dataTypes.*;
 import managers.StopsInterface;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface FactoryInterface {
@@ -13,5 +14,7 @@ public interface FactoryInterface {
     Optional<StopInterface> createStop(StopName stopName);
 
     Optional<LineInterface> createLine(LineName lineName, Time time);
+
+    void updateDatabase(List<LineSegmentInterface> lineSegments);
 
 }

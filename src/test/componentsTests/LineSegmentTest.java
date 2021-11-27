@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -21,7 +22,7 @@ public class LineSegmentTest {
     private StopInterface nextStop;
     private final int capacity = 1;
     private final LineName lineName = new LineName("L1");
-    private final List<Time> startingTimes = List.of(new Time(10), new Time(20), new Time(30));
+    private final Map<Time, Integer> numberOfPassengers = Map.of(new Time(10), 0, new Time(20), 0, new Time(30), 0);
     private Pair<Time, Optional<LineName>> nextStopData = new Pair<>(new Time(Long.MAX_VALUE), Optional.empty());
 
     @Before
@@ -47,7 +48,7 @@ public class LineSegmentTest {
                 return List.of(new LineName("L1"), new LineName("L2"));
             }
         };
-        lineSegment = new LineSegment(timeToNextStop, nextStop, capacity, lineName, startingTimes);
+        lineSegment = new LineSegment(timeToNextStop, nextStop, capacity, lineName, numberOfPassengers, 0);
     }
 
     @Test

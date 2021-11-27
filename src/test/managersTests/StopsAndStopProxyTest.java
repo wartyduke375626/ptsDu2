@@ -1,6 +1,7 @@
 package managersTests;
 
 import components.LineInterface;
+import components.LineSegmentInterface;
 import components.StopInterface;
 import components.StopProxy;
 import dataTypes.*;
@@ -65,6 +66,11 @@ public class StopsAndStopProxyTest {
             @Override
             public Optional<LineInterface> createLine(LineName lineName, Time time) {
                 return Optional.empty();
+            }
+
+            @Override
+            public void updateDatabase(List<LineSegmentInterface> lineSegments) {
+
             }
         };
         stops = new Stops(factory);

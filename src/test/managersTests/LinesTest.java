@@ -1,6 +1,7 @@
 package managersTests;
 
 import components.LineInterface;
+import components.LineSegmentInterface;
 import components.StopInterface;
 import dataTypes.*;
 
@@ -66,7 +67,17 @@ public class LinesTest {
                         }
                         return null;
                     }
+
+                    @Override
+                    public List<LineSegmentInterface> getLineSegments() {
+                        return null;
+                    }
                 });
+            }
+
+            @Override
+            public void updateDatabase(List<LineSegmentInterface> lineSegments) {
+
             }
         };
         lines = new Lines(factory);

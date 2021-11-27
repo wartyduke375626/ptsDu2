@@ -1,6 +1,7 @@
 package factoriesTests;
 
 import components.LineInterface;
+import components.LineSegmentInterface;
 import components.StopInterface;
 import dataTypes.*;
 import dataTypes.tuples.Pair;
@@ -18,6 +19,7 @@ import static org.junit.Assert.*;
 public class InMemoryFactoryTest {
 
     private InMemoryFactory inMemoryFactory;
+    private LineSegmentInterface updateLineSegment;
     private final Map<StopName, List<LineName>> inMemoryStops = Map.of(
             new StopName("Stop A"), List.of(new LineName("L1")),
             new StopName("Stop B"), List.of(new LineName("L1")),
@@ -41,6 +43,37 @@ public class InMemoryFactoryTest {
     public void setUp() {
         inMemoryFactory = new InMemoryFactory(inMemoryStops, inMemoryLines, inMemoryLineSegments);
         inMemoryFactory.setStops(new Stops(inMemoryFactory));
+        updateLineSegment = new LineSegmentInterface() {
+            @Override
+            public Pair<Time, StopName> nextStop(Time startTime) {
+                return null;
+            }
+
+            @Override
+            public Triplet<Time, StopName, Boolean> nextStopAndUpdateReachable(Time startTime) {
+                return null;
+            }
+
+            @Override
+            public LineName getLine() {
+                return new LineName("L1");
+            }
+
+            @Override
+            public int getSegmentIndex() {
+                return 0;
+            }
+
+            @Override
+            public void incrementCapacity(Time startTime) {
+
+            }
+
+            @Override
+            public Map<Time, Integer> getUpdatedBusses() {
+                return Map.of(new Time(10), 8, new Time(20), 5);
+            }
+        };
     }
 
     @Test
@@ -64,9 +97,14 @@ public class InMemoryFactoryTest {
         line.updateReachable(new Time(10), new StopName("Stop C"));
         line.updateReachable(new Time(10), new StopName("Stop B"));
         line.updateReachable(new Time(30), new StopName("Stop A"));
-        assertEquals(line.updateCapacityAndGetPreviousStop(new StopName("Stop C"), new Time(30)), new StopName("Stop B"));
+        assertEquals(line.updateCapacityAndGetPreviousStop(new StopName("Stop C"), new Time(30)).getFirst(), new StopName("Stop B"));
         assertThrows(NoSuchElementException.class, () -> line.updateCapacityAndGetPreviousStop(new StopName("Stop C"), new Time(10)));
-        assertEquals(line.updateCapacityAndGetPreviousStop(new StopName("Stop B"), new Time(30)), new StopName("Stop A"));
+        assertEquals(line.updateCapacityAndGetPreviousStop(new StopName("Stop B"), new Time(30)).getFirst(), new StopName("Stop A"));
         assertThrows(NoSuchElementException.class, () -> line.updateCapacityAndGetPreviousStop(new StopName("Stop A"), new Time(10)));
+    }
+
+    @Test
+    public void updateDatabaseTest() {
+        inMemoryFactory.updateDatabase(List.of(updateLineSegment));
     }
 }
