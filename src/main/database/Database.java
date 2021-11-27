@@ -1,11 +1,13 @@
-package factories;
+package database;
 
-import dataTypes.LineName;
-import dataTypes.StopName;
+import dataTypes.*;
+import dataTypes.Time;
+import dataTypes.tuples.Pair;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class Database implements DatabaseInterface {
@@ -21,7 +23,7 @@ public class Database implements DatabaseInterface {
     }
 
     @Override
-    public Optional<List<LineName>> getLinesAtStop(StopName stopName) {
+    public Optional<List<LineName>> getStopData(StopName stopName) {
         try (Connection connection = DriverManager.getConnection(databaseUrl)) {
             System.out.println("Connection to SQLite has been established.");
             PreparedStatement statement = connection.prepareStatement(query);
@@ -39,4 +41,13 @@ public class Database implements DatabaseInterface {
         }
     }
 
+    @Override
+    public Optional<Pair<StopName, List<Pair<StopName, TimeDiff>>>> getLineFirstStopAndSegmentsData(LineName lineName) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Map<Time, Pair<Integer, List<Integer>>>> getBussesAndPassengers(LineName lineName, Time time) {
+        return Optional.empty();
+    }
 }
