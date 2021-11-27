@@ -3,7 +3,6 @@ package managers;
 import dataTypes.*;
 import dataTypes.tuples.Pair;
 import dataTypes.tuples.Triplet;
-
 import java.util.*;
 
 public class ConnectionSearch {
