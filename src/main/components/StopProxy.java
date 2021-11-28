@@ -15,12 +15,10 @@ public class StopProxy implements StopInterface {
     private StopInterface stop = null;
     private final StopsInterface stops;
     private final StopName stopName;
-    private final List<LineName> lines;
 
-    public StopProxy(StopsInterface stops, StopName stopName, List<LineName> lines) {
+    public StopProxy(StopsInterface stops, StopName stopName) {
         this.stops = stops;
         this.stopName = stopName;
-        this.lines = Collections.unmodifiableList(lines);
     }
 
     @Override
@@ -46,7 +44,12 @@ public class StopProxy implements StopInterface {
     }
 
     @Override
-    public List<LineName> getLines() {
-        return lines;
+    public List<LineName> getLines() throws SQLException {
+        if (!stops.isLoaded(stopName)) {
+            stops.loadStop(stopName);
+            stop = stops.getStop(stopName);
+        }
+        else if (stop == null) stop = stops.getStop(stopName);
+        return stop.getLines();
     }
 }

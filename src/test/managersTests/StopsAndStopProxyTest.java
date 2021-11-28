@@ -75,18 +75,19 @@ public class StopsAndStopProxyTest {
             }
         };
         stops = new Stops(factory);
-        stopProxy = new StopProxy(stops, stopName, lines);
+        stopProxy = new StopProxy(stops, stopName);
     }
 
     @Test
-    public void getMethodsTest() {
+    public void getMethodsTest() throws SQLException {
         StopName proxyStop = stopProxy.getStopName();
         assertEquals(proxyStop, stopName);
-        List<LineName> proxyLines = stopProxy.getLines();
-        assertEquals(proxyLines, lines);
 
         assertFalse(stops.isLoaded(stopName));
         assertThrows(IllegalStateException.class, () -> stopProxy.getReachableAt());
+
+        List<LineName> proxyLines = stopProxy.getLines();
+        assertEquals(proxyLines, lines);
     }
 
     @Test

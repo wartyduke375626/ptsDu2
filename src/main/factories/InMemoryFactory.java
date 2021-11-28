@@ -70,8 +70,7 @@ public class InMemoryFactory implements FactoryInterface {
         List<LineSegmentInterface> lineSegments = new ArrayList<>();
         for (int i=0; i<lineSegmentsData.size(); i++) {
             StopName stop = lineSegmentsData.get(i).getFirst();
-            List<LineName> stopProxyLines = inMemoryStops.get(stop);
-            StopProxy nextStop = new StopProxy(stops, stop, stopProxyLines);
+            StopProxy nextStop = new StopProxy(stops, stop);
             lineSegments.add(new LineSegment(lineSegmentsData.get(i).getSecond(), nextStop, lineData.getThird(), lineName, lineSegmentsPassengers.get(i), i));
         }
 

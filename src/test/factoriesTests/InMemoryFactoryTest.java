@@ -21,6 +21,7 @@ public class InMemoryFactoryTest {
 
     private InMemoryFactory inMemoryFactory;
     private LineSegmentInterface updateLineSegment;
+
     private final Map<StopName, List<LineName>> inMemoryStops = Map.of(
             new StopName("Stop A"), List.of(new LineName("L1")),
             new StopName("Stop B"), List.of(new LineName("L1")),
@@ -78,7 +79,7 @@ public class InMemoryFactoryTest {
     }
 
     @Test
-    public void createStopTest() {
+    public void createStopTest() throws SQLException {
         Optional<StopInterface> data = inMemoryFactory.createStop(new StopName("Stop B"));
         assertTrue(data.isPresent());
         assertEquals(data.get().getStopName(), new StopName("Stop B"));

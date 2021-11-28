@@ -15,5 +15,5 @@ public interface StopInterface {
 
     StopName getStopName();
 
-    List<LineName> getLines();
+    List<LineName> getLines() throws SQLException;
 }
