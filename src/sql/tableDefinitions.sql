@@ -50,13 +50,5 @@ CREATE TABLE busSegment(
 	passengers INTEGER NOT NULL,
 	PRIMARY KEY (bid, lsid),
 	FOREIGN KEY (bid, capacity) REFERENCES bus(bid, capacity) ON DELETE RESTRICT ON UPDATE CASCADE DEFERRABLE INITIALLY IMMEDIATE,
-	CHECK (passengers > 0 AND passengers <= capacity)
+	CHECK (passengers >= 0 AND passengers <= capacity)
 );
-
-
-INSERT INTO stop(sid, sname) VALUES (1, 'STOP A');
-INSERT INTO line(lid, lname, firstStop) VALUES (1, 'L1', 1);
-INSERT INTO stop_line(sid, lid) VALUES (1, 1);
-INSERT INTO lineSegment(lsid, lid, sIndex, timeDiff, nextStop) VALUES (1, 1, 0, 5, 1);
-INSERT INTO bus(bid, lid, startTime, capacity) VALUES (1, 1, 0, 5);
-INSERT INTO busSegment(bid, lsid, capacity, passengers) VALUES (1, 1, 5, 4);

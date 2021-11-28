@@ -5,3 +5,4 @@ out/
 .idea/
 
 searchApp.iml
+database.db
