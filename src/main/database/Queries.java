@@ -14,15 +14,15 @@ public class Queries {
     }
 
     public static String getLineFirstStopAndLidQuery(LineName lineName) {
-        return "SELECT l.firstStop, l.lid\n" +
-                "FROM line l\n" +
-                "WHERE l.lname = '" + lineName.toString() + "'";
+        return "SELECT s.sname, l.lid\n" +
+                "FROM line l, stop s\n" +
+                "WHERE l.lname = '" + lineName.toString() + "' AND s.sid = l.firststop";
     }
 
     public static String getLineSegmentsDataQuery(int lid) {
-        return "SELECT ls.nextStop, ls.timeDiff, ls.sIndex\n" +
-                "FROM lineSegment ls\n" +
-                "WHERE l.id = " + lid;
+        return "SELECT s.sname, ls.timeDiff, ls.sIndex\n" +
+                "FROM lineSegment ls, stop s\n" +
+                "WHERE ls.lid = " + lid + " AND s.sid = ls.nextStop";
     }
 
     public static String getBusesDataAndBidsQuery(LineName lineName, Time time, TimeDiff maxStartTimeDifference) {

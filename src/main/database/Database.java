@@ -41,7 +41,7 @@ public class Database implements DatabaseInterface {
             ResultSet resultSet = statement.executeQuery(Queries.getLineFirstStopAndLidQuery(lineName));
             if (!resultSet.next()) return Optional.empty();
 
-            StopName firstStop = new StopName(resultSet.getString("firstStop"));
+            StopName firstStop = new StopName(resultSet.getString("sname"));
             int lid = resultSet.getInt("lid");
 
             resultSet = statement.executeQuery(Queries.getLineSegmentsDataQuery(lid));
@@ -49,7 +49,7 @@ public class Database implements DatabaseInterface {
             List<Triplet<Integer, StopName, TimeDiff>> lineSegmentsData = new ArrayList<>();
             while (resultSet.next()) {
                 int segmentIndex = resultSet.getInt("sIndex");
-                StopName nextStop = new StopName(resultSet.getString("nextStop"));
+                StopName nextStop = new StopName(resultSet.getString("sname"));
                 TimeDiff timeDiff = new TimeDiff(resultSet.getLong("timeDiff"));
                 lineSegmentsData.add(new Triplet<>(segmentIndex, nextStop, timeDiff));
             }
@@ -73,7 +73,7 @@ public class Database implements DatabaseInterface {
                 int capacity = resultSet.getInt("capacity");
                 buses.add(new Triplet<>(bid, startTime, capacity));
             }
-            if (buses.isEmpty()) throw new SQLIntegrityConstraintViolationException("Line with no buses in database.");
+            if (buses.isEmpty()) return Optional.empty();
 
             Map<Time, Pair<Integer, List<Pair<Integer, Integer>>>> result = new HashMap<>();
             for (Triplet<Integer, Time, Integer> busData : buses) {
@@ -84,8 +84,10 @@ public class Database implements DatabaseInterface {
                     int passengers = resultSet.getInt("passengers");
                     busSegmentsData.add(new Pair<>(segmentIndex, passengers));
                 }
+                if (busSegmentsData.isEmpty()) throw new SQLIntegrityConstraintViolationException("Bus with no bus segments in database.");
                 result.put(busData.getSecond(), new Pair<>(busData.getThird(), busSegmentsData));
             }
+
             return Optional.of(result);
         }
     }
