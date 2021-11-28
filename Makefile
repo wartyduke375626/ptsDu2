@@ -1,3 +1,6 @@
-db:
-	sqlite3 --init src/sql/tableDefinitions.sql database.db
-	sqlite3 database.db < src/sql/insertTestValues.sql
+testDB:
+	sqlite3 --init src/sql/tableDefinitions.sql testDB.db
+	sqlite3 testDB.db < src/sql/insertTestValues.sql
+
+clean:
+	rm testDB.db
