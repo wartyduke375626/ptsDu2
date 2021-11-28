@@ -19,6 +19,20 @@ public class DatabaseTest {
 
     private Database database;
 
+    private final Map<Pair<LineName, Time>, List<Pair<Integer, Integer>>> dataToBeUpdated = Map.of(
+            new Pair<>(new LineName("L1"), new Time(10)),
+            List.of(new Pair<>(1, 2), new Pair<>(2, 2), new Pair<>(3, 2)),
+            new Pair<>(new LineName("L3"), new Time(35)),
+            List.of(new Pair<>(0, 1), new Pair<>(1, 1), new Pair<>(2, 1))
+    );
+
+    private final Map<Pair<LineName, Time>, List<Pair<Integer, Integer>>> restoreData = Map.of(
+            new Pair<>(new LineName("L1"), new Time(10)),
+            List.of(new Pair<>(1, 0), new Pair<>(2, 0), new Pair<>(3, 0)),
+            new Pair<>(new LineName("L3"), new Time(35)),
+            List.of(new Pair<>(0, 0), new Pair<>(1, 0), new Pair<>(2, 0))
+    );
+
     @Before
     public void setUp() throws IOException, InterruptedException {
         database = new Database(TEST_DB_PATH);
@@ -79,5 +93,26 @@ public class DatabaseTest {
         assertTrue(data.isEmpty());
         data = database.getBussesAndPassengers(new LineName("L3"), new Time(Long.MAX_VALUE), MAX_START_TIME_DIFFERENCE);
         assertTrue(data.isEmpty());
+    }
+
+    @Test
+    public void updateBusPassengersTest() throws SQLException {
+        database.updateBusPassengers(dataToBeUpdated);
+        Optional<Map<Time, Pair<Integer, List<Pair<Integer, Integer>>>>> updatedLine = database.getBussesAndPassengers(new LineName("L1"), new Time(50), MAX_START_TIME_DIFFERENCE);
+        assertTrue(updatedLine.isPresent());
+        List<Pair<Integer, Integer>> bus = updatedLine.get().get(new Time(10)).getSecond();
+        for (Pair<Integer, Integer> busSegment : bus) {
+            if (busSegment.getFirst() == 0) assertEquals(busSegment.getSecond(), Integer.valueOf(0));
+            else assertEquals(busSegment.getSecond(), Integer.valueOf(2));
+        }
+
+        updatedLine = database.getBussesAndPassengers(new LineName("L3"), new Time(50), MAX_START_TIME_DIFFERENCE);
+        assertTrue(updatedLine.isPresent());
+        bus = updatedLine.get().get(new Time(35)).getSecond();
+        for (Pair<Integer, Integer> busSegment : bus) {
+            if (busSegment.getFirst() == 3) assertEquals(busSegment.getSecond(), Integer.valueOf(0));
+            else assertEquals(busSegment.getSecond(), Integer.valueOf(1));
+        }
+        database.updateBusPassengers(restoreData);
     }
 }

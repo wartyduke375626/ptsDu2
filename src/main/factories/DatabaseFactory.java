@@ -79,7 +79,19 @@ public class DatabaseFactory implements FactoryInterface {
     }
 
     @Override
-    public void updateDatabase(List<LineSegmentInterface> lineSegments) {
+    public void updateDatabase(List<LineSegmentInterface> lineSegments) throws SQLException {
+        Map<Pair<LineName, Time>, List<Pair<Integer, Integer>>> busesAndSegmentIndexesToUpdate = new HashMap<>();
+        for (LineSegmentInterface ls : lineSegments) {
+            LineName lineName = ls.getLine();
+            Map<Time, Integer> updatedBuses = ls.getUpdatedBusses();
 
+            for (Time startTime : updatedBuses.keySet()) {
+                Pair<LineName, Time> key = new Pair<>(lineName, startTime);
+                if (!busesAndSegmentIndexesToUpdate.containsKey(key)) busesAndSegmentIndexesToUpdate.put(key, new ArrayList<>());
+                busesAndSegmentIndexesToUpdate.get(key).add(new Pair<>(ls.getSegmentIndex(), updatedBuses.get(startTime)));
+            }
+        }
+
+        database.updateBusPassengers(busesAndSegmentIndexesToUpdate);
     }
 }

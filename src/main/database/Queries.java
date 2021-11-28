@@ -4,6 +4,9 @@ import dataTypes.LineName;
 import dataTypes.StopName;
 import dataTypes.Time;
 import dataTypes.TimeDiff;
+import dataTypes.tuples.Pair;
+
+import java.util.List;
 
 public class Queries {
 
@@ -39,4 +42,18 @@ public class Queries {
                 "WHERE bs.bid = " + bid + " AND ls.lsid = bs.lsid";
     }
 
+    public static String getBIDAndLSIDQuery(Time startingTime, LineName lineName, int segmentIndex) {
+        return "SELECT b.bid, ls.lsid\n" +
+                "FROM lineSegment ls, line l, bus b\n" +
+                "WHERE l.lid = ls.lid AND b.lid = l.lid AND " +
+                "b.startTime = " + startingTime.toString() + " AND " +
+                "l.lname = '" + lineName.toString() + "' AND " +
+                "ls.sIndex = " + segmentIndex;
+    }
+
+    public static String updateBusSegmentQuery(int bid, int lsid, int newPassengers) {
+        return "UPDATE busSegment\n" +
+                "SET passengers = " + newPassengers + "\n" +
+                "WHERE bid = " + bid + " AND lsid = " + lsid;
+    }
 }

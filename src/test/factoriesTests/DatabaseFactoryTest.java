@@ -1,6 +1,7 @@
 package factoriesTests;
 
 import components.LineInterface;
+import components.LineSegmentInterface;
 import components.StopInterface;
 import dataTypes.*;
 
@@ -23,6 +24,7 @@ public class DatabaseFactoryTest {
 
     private final List<StopName> dbStops = List.of(new StopName("STOP A"), new StopName("STOP B"), new StopName("STOP C"), new StopName("STOP D"));
     private final LineName dbLine = new LineName("L1");
+
 
     private final List<LineName> stopData = List.of(new LineName("L1"));
 
@@ -53,6 +55,13 @@ public class DatabaseFactoryTest {
             )))
     );
 
+    private Map<Pair<LineName, Time>, List<Pair<Integer, Integer>>> updateResult = null;
+    private final Map<Pair<LineName, Time>, List<Pair<Integer, Integer>>> expectedUpdateResult = Map.of(
+            new Pair<>(new LineName("L1"), new Time(10)),
+            List.of(new Pair<>(0, 5))
+    );
+    LineSegmentInterface fakeLineSegment;
+
     @Before
     public void setUp() {
         databaseFactory = new DatabaseFactory(new DatabaseInterface() {
@@ -74,8 +83,47 @@ public class DatabaseFactoryTest {
                 if (lineName.equals(dbLine)) return Optional.of(bussesAndPassengersData);
                 return Optional.empty();
             }
+
+            @Override
+            public void updateBusPassengers(Map<Pair<LineName, Time>, List<Pair<Integer, Integer>>> busesAndSegmentIndexesToUpdate) throws SQLException {
+                updateResult = busesAndSegmentIndexesToUpdate;
+            }
+
         }, new TimeDiff(100));
+
         databaseFactory.setStops(new Stops(databaseFactory));
+
+        fakeLineSegment = new LineSegmentInterface() {
+            @Override
+            public Pair<Time, StopName> nextStop(Time startTime) {
+                return null;
+            }
+
+            @Override
+            public Triplet<Time, StopName, Boolean> nextStopAndUpdateReachable(Time startTime) throws SQLException {
+                return null;
+            }
+
+            @Override
+            public LineName getLine() {
+                return new LineName("L1");
+            }
+
+            @Override
+            public int getSegmentIndex() {
+                return 0;
+            }
+
+            @Override
+            public void incrementCapacity(Time startTime) {
+
+            }
+
+            @Override
+            public Map<Time, Integer> getUpdatedBusses() {
+                return Map.of(new Time(10), 5);
+            }
+        };
     }
 
     @Test
@@ -103,5 +151,11 @@ public class DatabaseFactoryTest {
         assertThrows(NoSuchElementException.class, () -> line.updateCapacityAndGetPreviousStop(new StopName("STOP C"), new Time(10)));
         assertEquals(line.updateCapacityAndGetPreviousStop(new StopName("STOP B"), new Time(15)).getFirst(), new StopName("STOP A"));
         assertThrows(NoSuchElementException.class, () -> line.updateCapacityAndGetPreviousStop(new StopName("STOP A"), new Time(10)));
+    }
+
+    @Test
+    public void updateDatabaseTest() throws SQLException {
+        databaseFactory.updateDatabase(List.of(fakeLineSegment));
+        assertEquals(expectedUpdateResult, updateResult);
     }
 }

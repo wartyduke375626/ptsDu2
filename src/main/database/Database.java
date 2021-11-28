@@ -91,4 +91,29 @@ public class Database implements DatabaseInterface {
             return Optional.of(result);
         }
     }
+
+    @Override
+    public void updateBusPassengers(Map<Pair<LineName, Time>, List<Pair<Integer, Integer>>> busesAndSegmentIndexesToUpdate) throws SQLException {
+        try (Connection connection = DriverManager.getConnection(databaseUrl)) {
+            System.out.println("Connection to SQLite has been established.");
+            Statement statement = connection.createStatement();
+
+            for (Pair<LineName, Time> busToUpdate : busesAndSegmentIndexesToUpdate.keySet()) {
+                LineName lineName = busToUpdate.getFirst();
+                Time startTime = busToUpdate.getSecond();
+                for (Pair<Integer, Integer> indexAndUpdateValue : busesAndSegmentIndexesToUpdate.get(busToUpdate)) {
+                    int sIndex = indexAndUpdateValue.getFirst();
+                    int newPassengers = indexAndUpdateValue.getSecond();
+
+                    ResultSet resultSet = statement.executeQuery(Queries.getBIDAndLSIDQuery(startTime, lineName, sIndex));
+                    if (!resultSet.next()) throw new IllegalArgumentException("Argument data does not match a busSegment in database.");
+                    int bid = resultSet.getInt("bid");
+                    int lsid = resultSet.getInt("lsid");
+                    statement.executeUpdate(Queries.updateBusSegmentQuery(bid, lsid, newPassengers));
+
+                    if (resultSet.next()) throw new SQLIntegrityConstraintViolationException("Argument data matches multiple busSegments in database.");
+                }
+            }
+        }
+    }
 }
