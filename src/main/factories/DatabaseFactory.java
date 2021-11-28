@@ -30,19 +30,31 @@ public class DatabaseFactory implements FactoryInterface {
     @Override
     public Optional<StopInterface> createStop(StopName stopName) throws SQLException {
         if (stops == null) throw new IllegalStateException("Stops have not been initialized yet.");
+
+        database.startSession();
         Optional<List<LineName>> stopData = database.getStopData(stopName);
+        database.endSession();
+
         if (stopData.isEmpty()) return Optional.empty();
 
         return Optional.of(new Stop(stopName, stopData.get()));
+
     }
 
     @Override
     public Optional<LineInterface> createLine(LineName lineName, Time time) throws SQLException {
         if (stops == null) throw new IllegalStateException("Stops have not been initialized yet.");
+
+        database.startSession();
         Optional<Pair<StopName, List<Triplet<Integer, StopName, TimeDiff>>>> lineData = database.getLineFirstStopAndLineSegmentsData(lineName);
-        if (lineData.isEmpty()) return Optional.empty();
+        if (lineData.isEmpty()) {
+            database.endSession();
+            return Optional.empty();
+        }
 
         Optional<Map<Time, Pair<Integer, List<Pair<Integer, Integer>>>>> busesData = database.getBussesAndPassengers(lineName, time, maxStartTimeDifference);
+        database.endSession();
+
         if (busesData.isEmpty()) throw new SQLIntegrityConstraintViolationException("Line with no buses in database.");
 
         StopName firstStop = lineData.get().getFirst();
@@ -92,6 +104,8 @@ public class DatabaseFactory implements FactoryInterface {
             }
         }
 
+        database.startSession();
         database.updateBusPassengers(busesAndSegmentIndexesToUpdate);
+        database.endSession();
     }
 }

@@ -1,3 +1,5 @@
+package factoriesTests;
+
 import dataTypes.*;
 
 import dataTypes.tuples.Pair;
@@ -40,6 +42,8 @@ public class DatabaseTest {
 
     @Test
     public void getStopDataTest() throws SQLException {
+        database.startSession();
+
         Optional<List<LineName>> data = database.getStopData(new StopName("STOP D"));
         assertTrue(data.isPresent());
         List<LineName> expected = List.of(new LineName("L1"), new LineName("L4"), new LineName("L5"));
@@ -48,10 +52,14 @@ public class DatabaseTest {
 
         data = database.getStopData(new StopName("NO STOP"));
         assertTrue(data.isEmpty());
+
+        database.endSession();
     }
 
     @Test
     public void getLineFirstStopAndLineSegmentsDataTest() throws SQLException {
+        database.startSession();
+
         Optional<Pair<StopName, List<Triplet<Integer, StopName, TimeDiff>>>> data = database.getLineFirstStopAndLineSegmentsData(new LineName("L1"));
         assertTrue(data.isPresent());
         StopName firstStop = data.get().getFirst();
@@ -68,10 +76,14 @@ public class DatabaseTest {
 
         data = database.getLineFirstStopAndLineSegmentsData(new LineName("NO LINE"));
         assertTrue(data.isEmpty());
+
+        database.endSession();
     }
 
     @Test
     public void getBussesAndPassengersTest() throws SQLException {
+        database.startSession();
+
         Optional<Map<Time, Pair<Integer, List<Pair<Integer, Integer>>>>> data = database.getBussesAndPassengers(new LineName("L3"), new Time(50), MAX_START_TIME_DIFFERENCE);
         assertTrue(data.isPresent());
         Set<Time> expectedKeySet = Set.of(new Time(10), new Time(35), new Time(60), new Time(85));
@@ -93,10 +105,14 @@ public class DatabaseTest {
         assertTrue(data.isEmpty());
         data = database.getBussesAndPassengers(new LineName("L3"), new Time(Long.MAX_VALUE), MAX_START_TIME_DIFFERENCE);
         assertTrue(data.isEmpty());
+
+        database.endSession();
     }
 
     @Test
     public void updateBusPassengersTest() throws SQLException {
+        database.startSession();
+
         database.updateBusPassengers(dataToBeUpdated);
         Optional<Map<Time, Pair<Integer, List<Pair<Integer, Integer>>>>> updatedLine = database.getBussesAndPassengers(new LineName("L1"), new Time(50), MAX_START_TIME_DIFFERENCE);
         assertTrue(updatedLine.isPresent());
@@ -114,5 +130,7 @@ public class DatabaseTest {
             else assertEquals(busSegment.getSecond(), Integer.valueOf(1));
         }
         database.updateBusPassengers(restoreData);
+
+        database.endSession();
     }
 }

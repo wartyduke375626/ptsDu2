@@ -11,6 +11,10 @@ import java.util.Optional;
 
 public interface DatabaseInterface {
 
+    void startSession() throws SQLException;
+
+    void endSession() throws SQLException;
+
     Optional<List<LineName>> getStopData(StopName stopName) throws SQLException;
 
     Optional<Pair<StopName, List<Triplet<Integer, StopName, TimeDiff>>>> getLineFirstStopAndLineSegmentsData(LineName lineName) throws SQLException;

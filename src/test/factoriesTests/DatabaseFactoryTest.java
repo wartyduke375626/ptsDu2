@@ -66,6 +66,16 @@ public class DatabaseFactoryTest {
     public void setUp() {
         databaseFactory = new DatabaseFactory(new DatabaseInterface() {
             @Override
+            public void startSession() throws SQLException {
+
+            }
+
+            @Override
+            public void endSession() throws SQLException {
+
+            }
+
+            @Override
             public Optional<List<LineName>> getStopData(StopName stopName) throws SQLException {
                 if (dbStops.contains(stopName)) return Optional.of(stopData);
                 return Optional.empty();
