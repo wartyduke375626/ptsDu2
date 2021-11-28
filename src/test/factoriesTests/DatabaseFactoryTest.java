@@ -125,6 +125,11 @@ public class DatabaseFactoryTest {
             }
 
             @Override
+            public TimeDiff getTimeDiffFromStart() {
+                return new TimeDiff(0);
+            }
+
+            @Override
             public void incrementCapacity(Time startTime) {
 
             }

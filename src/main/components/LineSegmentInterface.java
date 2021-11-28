@@ -17,6 +17,8 @@ public interface LineSegmentInterface {
 
     int getSegmentIndex();
 
+    TimeDiff getTimeDiffFromStart();
+
     void incrementCapacity(Time startTime);
 
     Map<Time, Integer> getUpdatedBusses();

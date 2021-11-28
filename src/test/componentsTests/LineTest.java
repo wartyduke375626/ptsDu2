@@ -69,6 +69,11 @@ public class LineTest {
                 }
 
                 @Override
+                public TimeDiff getTimeDiffFromStart() {
+                    return null;
+                }
+
+                @Override
                 public void incrementCapacity(Time startTime) {
                     lineSegmentCapacityUpdated.set(finalI, true);
                 }

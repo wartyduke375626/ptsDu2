@@ -12,5 +12,7 @@ public interface LinesInterface {
 
     Triplet<StopName, Time, TimeDiff> updateCapacityAndGetPreviousStop(LineName line, StopName stop, Time time);
 
-    void clean() throws SQLException;
+    void saveUpdatedLineSegments() throws SQLException;
+
+    void clean();
 }

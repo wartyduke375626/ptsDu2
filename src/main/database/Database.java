@@ -42,7 +42,11 @@ public class Database implements DatabaseInterface {
         while (resultSet.next()) {
             stopLines.add(new LineName(resultSet.getString("lname")));
         }
-        if (stopLines.isEmpty()) return Optional.empty();
+        if (stopLines.isEmpty()) {
+            resultSet = statement.executeQuery(Queries.getStopQuery(stopName));
+            if (!resultSet.next()) return Optional.empty();
+            return Optional.of(stopLines);
+        }
 
         return Optional.of(stopLines);
     }

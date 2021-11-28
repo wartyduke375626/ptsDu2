@@ -47,7 +47,8 @@ INSERT INTO stop_line(sid, lid) VALUES (8, 4);
 INSERT INTO stop_line(sid, lid) VALUES (8, 5);
 
 INSERT INTO stop_line(sid, lid) VALUES (9, 2);
-INSERT INTO stop_line(sid, lid) VALUES (9, 3);
+
+INSERT INTO stop_line(sid, lid) VALUES (10, 3);
 
 
 /* lineSegments */
@@ -56,7 +57,7 @@ INSERT INTO lineSegment(lsid, lid, sIndex, timeDiff, nextStop) VALUES (2, 1, 1, 
 INSERT INTO lineSegment(lsid, lid, sIndex, timeDiff, nextStop) VALUES (3, 1, 2, 3, 5);
 INSERT INTO lineSegment(lsid, lid, sIndex, timeDiff, nextStop) VALUES (4, 1, 3, 8, 6);
 
-INSERT INTO lineSegment(lsid, lid, sIndex, timeDiff, nextStop) VALUES (5, 2, 0, 8, 6);
+INSERT INTO lineSegment(lsid, lid, sIndex, timeDiff, nextStop) VALUES (5, 2, 0, 8, 5);
 INSERT INTO lineSegment(lsid, lid, sIndex, timeDiff, nextStop) VALUES (6, 2, 1, 5, 9);
 INSERT INTO lineSegment(lsid, lid, sIndex, timeDiff, nextStop) VALUES (7, 2, 2, 2, 8);
 INSERT INTO lineSegment(lsid, lid, sIndex, timeDiff, nextStop) VALUES (8, 2, 3, 7, 10);

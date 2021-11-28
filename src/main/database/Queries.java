@@ -10,6 +10,12 @@ import java.util.List;
 
 public class Queries {
 
+    public static String getStopQuery(StopName stopName) {
+        return "SELECT s.sname\n" +
+                "FROM stop s\n" +
+                "WHERE s.sname = '" + stopName.toString() + "'";
+    }
+
     public static String getStopLinesQuery(StopName stopName) {
         return "SELECT l.lname\n" +
                 "FROM stop s, line l, stop_line sl\n" +

@@ -20,6 +20,7 @@ public class LineSegmentTest {
 
     private LineSegment lineSegment;
     private final TimeDiff timeToNextStop = new TimeDiff(10);
+    private final TimeDiff timeDiffFromStart = new TimeDiff(50);
     private StopInterface nextStop;
     private final int capacity = 1;
     private final LineName lineName = new LineName("L1");
@@ -49,7 +50,7 @@ public class LineSegmentTest {
                 return List.of(new LineName("L1"), new LineName("L2"));
             }
         };
-        lineSegment = new LineSegment(timeToNextStop, nextStop, capacity, lineName, numberOfPassengers, 0);
+        lineSegment = new LineSegment(timeToNextStop, timeDiffFromStart, nextStop, capacity, lineName, numberOfPassengers, 0);
     }
 
     @Test

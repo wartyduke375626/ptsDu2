@@ -65,8 +65,8 @@ public class InMemoryIntegrationTest {
     @Test
     public void searchTest1() {
         assertThrows(NoSuchElementException.class, () -> connectionSearch.search(new StopName("Stop I"), new StopName("Stop O"), new Time(0)));
+
         ConnectionData data = connectionSearch.search(new StopName("Stop A"), new StopName("Stop D"), new Time(0));
-        assertEquals(data.getLastStop(), new StopName("Stop D"));
         List<Quadruplet<LineName, StopName, Time, TimeDiff>> segmentsData = data.getTravelSegments();
         assertEquals(segmentsData.size(), 3);
         Quadruplet<LineName, StopName, Time, TimeDiff> x = segmentsData.get(0);
@@ -84,6 +84,7 @@ public class InMemoryIntegrationTest {
         assertEquals(x.getSecond(), new StopName("Stop C"));
         assertEquals(x.getThird(), new Time(20));
         assertEquals(x.getForth(), new TimeDiff(5));
+        assertEquals(data.getLastStop(), new StopName("Stop D"));
     }
 
     @Test

@@ -83,7 +83,7 @@ public class DatabaseFactory implements FactoryInterface {
                 numberOfPassengers.put(segmentStartTime, passengerCount);
             }
 
-            lineSegments.add(new LineSegment(timeToNextStop, nextStop, capacity, lineName, numberOfPassengers, i));
+            lineSegments.add(new LineSegment(timeToNextStop, totalTimeDiff, nextStop, capacity, lineName, numberOfPassengers, i));
             totalTimeDiff = new TimeDiff(totalTimeDiff.getTime() + timeToNextStop.getTime());
         }
 
@@ -98,7 +98,7 @@ public class DatabaseFactory implements FactoryInterface {
             Map<Time, Integer> updatedBuses = ls.getUpdatedBusses();
 
             for (Time startTime : updatedBuses.keySet()) {
-                Pair<LineName, Time> key = new Pair<>(lineName, startTime);
+                Pair<LineName, Time> key = new Pair<>(lineName, new Time(startTime.getTime() - ls.getTimeDiffFromStart().getTime()));
                 if (!busesAndSegmentIndexesToUpdate.containsKey(key)) busesAndSegmentIndexesToUpdate.put(key, new ArrayList<>());
                 busesAndSegmentIndexesToUpdate.get(key).add(new Pair<>(ls.getSegmentIndex(), updatedBuses.get(startTime)));
             }

@@ -10,6 +10,7 @@ import java.util.*;
 public class LineSegment implements LineSegmentInterface {
 
     private final TimeDiff timeToNextStop;
+    private final TimeDiff timeDiffFromStart;
     private final StopInterface nextStop;
     private final int capacity;
     private final LineName lineName;
@@ -17,9 +18,10 @@ public class LineSegment implements LineSegmentInterface {
     private final Map<Time, Integer> updatedBusses = new HashMap<>();
     private final int segmentIndex;
 
-    public LineSegment(TimeDiff timeToNextStop, StopInterface nextStop, int capacity, LineName lineName, Map<Time, Integer> numberOfPassengers, int segmentIndex) {
+    public LineSegment(TimeDiff timeToNextStop, TimeDiff timeDiffFromStart, StopInterface nextStop, int capacity, LineName lineName, Map<Time, Integer> numberOfPassengers, int segmentIndex) {
         if (capacity < 0) throw new IllegalArgumentException("Capacity cannot be negative.");
         this.timeToNextStop = timeToNextStop;
+        this.timeDiffFromStart = timeDiffFromStart;
         this.nextStop = nextStop;
         this.capacity = capacity;
         this.lineName = lineName;
@@ -51,6 +53,11 @@ public class LineSegment implements LineSegmentInterface {
     @Override
     public int getSegmentIndex() {
         return segmentIndex;
+    }
+
+    @Override
+    public TimeDiff getTimeDiffFromStart() {
+        return timeDiffFromStart;
     }
 
     @Override

@@ -39,12 +39,14 @@ public class ConnectionSearch {
             result.setLastStop(tmpStop);
             while (!tmpStop.equals(from)) {
                 Pair<Time, Optional<LineName>> data = stops.getReachableAt(tmpStop);
-                if (data.getSecond().isEmpty())
-                    throw new NullPointerException("A stop other than starting stop was not reached by line.");
+                if (data.getSecond().isEmpty()) throw new NullPointerException("A stop other than starting stop was not reached by line.");
+
                 Triplet<StopName, Time, TimeDiff> resultData = lines.updateCapacityAndGetPreviousStop(data.getSecond().get(), tmpStop, data.getFirst());
                 result.addTravelSegment(data.getSecond().get(), resultData.getFirst(), resultData.getSecond(), resultData.getThird());
                 tmpStop = resultData.getFirst();
             }
+
+            lines.saveUpdatedLineSegments();
 
             lines.clean();
             stops.clean();
@@ -52,6 +54,9 @@ public class ConnectionSearch {
         } catch (SQLException e) {
             System.err.println("Database fatal error: " + e.getMessage());
             return null;
+        } finally {
+            lines.clean();
+            stops.clean();
         }
     }
 }

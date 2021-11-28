@@ -13,7 +13,7 @@ public class InMemoryFactory implements FactoryInterface {
     private final Map<StopName, List<LineName>> inMemoryStops;
     private final Map<LineName, Triplet<List<Time>, StopName, Integer>> inMemoryLines;
     private final Map<LineName, List<Pair<StopName, TimeDiff>>> inMemoryLineSegments;
-    private final Map<LineName, List<Map<Time, Integer>>> inMemoryLineSegmentsPassengers = new HashMap<>();
+    private final Map<LineName, List<Pair<TimeDiff, Map<Time, Integer>>>> inMemoryLineSegmentsPassengers = new HashMap<>();
 
     private StopsInterface stops = null;
 
@@ -34,13 +34,13 @@ public class InMemoryFactory implements FactoryInterface {
             List<Time> startingTimes = inMemoryLines.get(line).getFirst();
             List<Pair<StopName, TimeDiff>> lineSegmentsData = inMemoryLineSegments.get(line);
             TimeDiff totalTimeDiff = new TimeDiff(0);
-            List<Map<Time, Integer>> lineSegmentsPassengers = new ArrayList<>();
+            List<Pair<TimeDiff, Map<Time, Integer>>> lineSegmentsPassengers = new ArrayList<>();
             for (Pair<StopName, TimeDiff> lineSegmentData : lineSegmentsData) {
                 Map<Time, Integer> lineSegmentPassengers = new HashMap<>();
                 for (Time time : startingTimes) {
                     lineSegmentPassengers.put(new Time(time.getTime() + totalTimeDiff.getTime()), 0);
                 }
-                lineSegmentsPassengers.add(lineSegmentPassengers);
+                lineSegmentsPassengers.add(new Pair<>(totalTimeDiff, lineSegmentPassengers));
                 totalTimeDiff = new TimeDiff(totalTimeDiff.getTime() + lineSegmentData.getSecond().getTime());
             }
             inMemoryLineSegmentsPassengers.put(line, lineSegmentsPassengers);
@@ -65,13 +65,13 @@ public class InMemoryFactory implements FactoryInterface {
         if (!inMemoryLines.containsKey(lineName)) return Optional.empty();
         Triplet<List<Time>, StopName, Integer> lineData = inMemoryLines.get(lineName);
         List<Pair<StopName, TimeDiff>> lineSegmentsData = inMemoryLineSegments.get(lineName);
-        List<Map<Time, Integer>> lineSegmentsPassengers = inMemoryLineSegmentsPassengers.get(lineName);
+        List<Pair<TimeDiff, Map<Time, Integer>>> lineSegmentsPassengers = inMemoryLineSegmentsPassengers.get(lineName);
 
         List<LineSegmentInterface> lineSegments = new ArrayList<>();
         for (int i=0; i<lineSegmentsData.size(); i++) {
             StopName stop = lineSegmentsData.get(i).getFirst();
             StopProxy nextStop = new StopProxy(stops, stop);
-            lineSegments.add(new LineSegment(lineSegmentsData.get(i).getSecond(), nextStop, lineData.getThird(), lineName, lineSegmentsPassengers.get(i), i));
+            lineSegments.add(new LineSegment(lineSegmentsData.get(i).getSecond(), lineSegmentsPassengers.get(i).getFirst(), nextStop, lineData.getThird(), lineName, lineSegmentsPassengers.get(i).getSecond(), i));
         }
 
         return Optional.of(new Line(lineName, lineData.getFirst(), lineData.getSecond(), lineSegments));
@@ -82,7 +82,7 @@ public class InMemoryFactory implements FactoryInterface {
         for (LineSegmentInterface lineSegment : lineSegments) {
             LineName lineName = lineSegment.getLine();
             for (Time time : lineSegment.getUpdatedBusses().keySet()) {
-                Map<Time, Integer> inMemoryPassengers = inMemoryLineSegmentsPassengers.get(lineName).get(lineSegment.getSegmentIndex());
+                Map<Time, Integer> inMemoryPassengers = inMemoryLineSegmentsPassengers.get(lineName).get(lineSegment.getSegmentIndex()).getSecond();
                 if (!inMemoryPassengers.containsKey(time)) throw new NoSuchElementException("Bus to be updated not contained in memory.");
                 inMemoryPassengers.put(time, lineSegment.getUpdatedBusses().get(time));
             }

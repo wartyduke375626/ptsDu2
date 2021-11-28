@@ -40,7 +40,7 @@ public class Lines implements LinesInterface {
     }
 
     @Override
-    public void clean() throws SQLException {
+    public void saveUpdatedLineSegments() throws SQLException {
         List<LineSegmentInterface> modifiedLineSegments = new ArrayList<>();
         for (LineName line : lines.keySet()) {
             List<LineSegmentInterface> lineSegments = lines.get(line).getLineSegments();
@@ -49,6 +49,10 @@ public class Lines implements LinesInterface {
             }
         }
         factory.updateDatabase(modifiedLineSegments);
+    }
+
+    @Override
+    public void clean() {
         lines = new HashMap<>();
     }
 }

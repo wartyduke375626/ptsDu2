@@ -67,6 +67,11 @@ public class InMemoryFactoryTest {
             }
 
             @Override
+            public TimeDiff getTimeDiffFromStart() {
+                return null;
+            }
+
+            @Override
             public void incrementCapacity(Time startTime) {
 
             }
