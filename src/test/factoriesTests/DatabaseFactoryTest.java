@@ -99,6 +99,11 @@ public class DatabaseFactoryTest {
                 updateResult = busesAndSegmentIndexesToUpdate;
             }
 
+            @Override
+            public void resetPassengers() throws SQLException {
+
+            }
+
         }, new TimeDiff(100));
 
         databaseFactory.setStops(new Stops(databaseFactory));

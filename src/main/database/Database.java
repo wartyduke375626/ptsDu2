@@ -28,6 +28,7 @@ public class Database implements DatabaseInterface {
     public void endSession() throws SQLException {
         if (connection == null) throw new IllegalStateException("Session has not been started.");
         connection.close();
+        System.out.println("Connection to SQLite closed correctly.");
         connection = null;
     }
 
@@ -130,5 +131,13 @@ public class Database implements DatabaseInterface {
                 if (resultSet.next()) throw new SQLIntegrityConstraintViolationException("Argument data matches multiple busSegments in database.");
             }
         }
+    }
+
+    @Override
+    public void resetPassengers() throws SQLException {
+        if (connection == null) throw new IllegalStateException("Session has not been started.");
+
+        Statement statement = connection.createStatement();
+        statement.executeUpdate(Queries.resetPassengersQuery);
     }
 }

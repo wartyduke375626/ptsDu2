@@ -62,4 +62,6 @@ public class Queries {
                 "SET passengers = " + newPassengers + "\n" +
                 "WHERE bid = " + bid + " AND lsid = " + lsid;
     }
+
+    public static String resetPassengersQuery = "UPDATE busSegment\n SET passengers = 0";
 }

@@ -22,4 +22,6 @@ public interface DatabaseInterface {
     Optional<Map<Time, Pair<Integer, List<Pair<Integer, Integer>>>>> getBussesAndPassengers(LineName lineName, Time time, TimeDiff maxStartTimeDifference) throws SQLException;
 
     void updateBusPassengers(Map<Pair<LineName, Time>, List<Pair<Integer, Integer>>> busesAndSegmentIndexesToUpdate) throws SQLException;
+
+    void resetPassengers() throws SQLException;
 }

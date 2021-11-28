@@ -28,13 +28,6 @@ public class DatabaseTest {
             List.of(new Pair<>(0, 1), new Pair<>(1, 1), new Pair<>(2, 1))
     );
 
-    private final Map<Pair<LineName, Time>, List<Pair<Integer, Integer>>> restoreData = Map.of(
-            new Pair<>(new LineName("L1"), new Time(10)),
-            List.of(new Pair<>(1, 0), new Pair<>(2, 0), new Pair<>(3, 0)),
-            new Pair<>(new LineName("L3"), new Time(35)),
-            List.of(new Pair<>(0, 0), new Pair<>(1, 0), new Pair<>(2, 0))
-    );
-
     @Before
     public void setUp() throws IOException, InterruptedException {
         database = new Database(TEST_DB_PATH);
@@ -129,8 +122,8 @@ public class DatabaseTest {
             if (busSegment.getFirst() == 3) assertEquals(busSegment.getSecond(), Integer.valueOf(0));
             else assertEquals(busSegment.getSecond(), Integer.valueOf(1));
         }
-        database.updateBusPassengers(restoreData);
 
+        database.resetPassengers();
         database.endSession();
     }
 }

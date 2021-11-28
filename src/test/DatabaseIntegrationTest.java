@@ -1,6 +1,5 @@
 import dataTypes.*;
 
-import dataTypes.tuples.Pair;
 import dataTypes.tuples.Quadruplet;
 import database.Database;
 import database.DatabaseInterface;
@@ -62,14 +61,8 @@ public class DatabaseIntegrationTest {
         assertEquals(x.getForth(), new TimeDiff(4));
         assertEquals(data.getLastStop(), new StopName("STOP D"));
 
-        Map<Pair<LineName, Time>, List<Pair<Integer, Integer>>> restoreData = Map.of(
-                new Pair<>(new LineName("L2"), new Time(40)),
-                List.of(new Pair<>(0, 0), new Pair<>(1, 0), new Pair<>(2, 0)),
-                new Pair<>(new LineName("L5"), new Time(60)),
-                List.of(new Pair<>(1, 0))
-        );
         database.startSession();
-        database.updateBusPassengers(restoreData);
+        database.resetPassengers();
         database.endSession();
     }
 }
