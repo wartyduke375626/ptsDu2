@@ -2,10 +2,10 @@ package components;
 
 import dataTypes.*;
 import dataTypes.tuples.Pair;
+import exceptions.IncorrectUserInputException;
 import managers.StopsInterface;
 
 import java.sql.SQLException;
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -22,7 +22,7 @@ public class StopProxy implements StopInterface {
     }
 
     @Override
-    public void updateReachableAt(Time time, LineName line) throws SQLException {
+    public void updateReachableAt(Time time, LineName line) throws SQLException, IncorrectUserInputException {
         if (!stops.isLoaded(stopName)) {
             stops.loadStop(stopName);
             stop = stops.getStop(stopName);
@@ -44,7 +44,7 @@ public class StopProxy implements StopInterface {
     }
 
     @Override
-    public List<LineName> getLines() throws SQLException {
+    public List<LineName> getLines() throws SQLException, IncorrectUserInputException {
         if (!stops.isLoaded(stopName)) {
             stops.loadStop(stopName);
             stop = stops.getStop(stopName);

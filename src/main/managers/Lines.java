@@ -4,6 +4,7 @@ import components.LineInterface;
 import components.LineSegmentInterface;
 import dataTypes.*;
 import dataTypes.tuples.Triplet;
+import exceptions.IncorrectUserInputException;
 import factories.FactoryInterface;
 
 import java.sql.SQLException;
@@ -18,15 +19,15 @@ public class Lines implements LinesInterface {
         this.factory = factory;
     }
 
-    private void loadLine(LineName line, Time time) throws SQLException {
+    private void loadLine(LineName line, Time time) throws SQLException, IncorrectUserInputException {
         if (lines.containsKey(line)) throw new IllegalStateException("Line has already been loaded.");
         Optional<LineInterface> newLine = factory.createLine(line, time);
-        if (newLine.isEmpty()) throw new NoSuchElementException("No such line in database.");
+        if (newLine.isEmpty()) throw new IncorrectUserInputException("No such line in database.");
         lines.put(line, newLine.get());
     }
 
     @Override
-    public void updateReachable(List<LineName> lines, StopName stop, Time time) throws SQLException {
+    public void updateReachable(List<LineName> lines, StopName stop, Time time) throws SQLException, IncorrectUserInputException {
         for (LineName line : lines) {
             if (!this.lines.containsKey(line)) loadLine(line, time);
             this.lines.get(line).updateReachable(time, stop);

@@ -64,10 +64,13 @@ public class InMemoryIntegrationTest {
 
     @Test
     public void searchTest1() {
-        assertThrows(NoSuchElementException.class, () -> connectionSearch.search(new StopName("Stop I"), new StopName("Stop O"), new Time(0)));
+        Optional<ConnectionData> data = connectionSearch.search(new StopName("Stop I"), new StopName("Stop O"), new Time(0));
+        assertTrue(data.isEmpty());
 
-        ConnectionData data = connectionSearch.search(new StopName("Stop A"), new StopName("Stop D"), new Time(0));
-        List<Quadruplet<LineName, StopName, Time, TimeDiff>> segmentsData = data.getTravelSegments();
+        data = connectionSearch.search(new StopName("Stop A"), new StopName("Stop D"), new Time(0));
+        assertTrue(data.isPresent());
+        List<Quadruplet<LineName, StopName, Time, TimeDiff>> segmentsData = data.get().getTravelSegments();
+
         assertEquals(segmentsData.size(), 3);
         Quadruplet<LineName, StopName, Time, TimeDiff> x = segmentsData.get(0);
         assertEquals(x.getFirst(), new LineName("L1"));
@@ -84,17 +87,17 @@ public class InMemoryIntegrationTest {
         assertEquals(x.getSecond(), new StopName("Stop C"));
         assertEquals(x.getThird(), new Time(20));
         assertEquals(x.getForth(), new TimeDiff(5));
-        assertEquals(data.getLastStop(), new StopName("Stop D"));
+        assertEquals(data.get().getLastStop(), new StopName("Stop D"));
     }
 
     @Test
     public void searchTest2() {
-        ConnectionData data = connectionSearch.search(new StopName("Stop Y"), new StopName("Stop A"), new Time(0));
-        assertNull(data);
+        Optional<ConnectionData> data = connectionSearch.search(new StopName("Stop Y"), new StopName("Stop A"), new Time(0));
+        assertTrue(data.isEmpty());
         connectionSearch.search(new StopName("Stop A"), new StopName("Stop D"), new Time(0));
         data = connectionSearch.search(new StopName("Stop A"), new StopName("Stop D"), new Time(0));
-        assertNotNull(data);
+        assertTrue(data.isPresent());
         data = connectionSearch.search(new StopName("Stop A"), new StopName("Stop D"), new Time(0));
-        assertNull(data);
+        assertTrue(data.isEmpty());
     }
 }

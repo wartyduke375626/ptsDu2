@@ -6,6 +6,7 @@ import dataTypes.*;
 
 import dataTypes.tuples.Pair;
 import dataTypes.tuples.Triplet;
+import exceptions.IncorrectUserInputException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -61,7 +62,7 @@ public class LineSegmentTest {
     }
 
     @Test
-    public void nextStopAndUpdateReachableTest() throws SQLException {
+    public void nextStopAndUpdateReachableTest() throws SQLException, IncorrectUserInputException {
         Triplet<Time, StopName, Boolean> data = lineSegment.nextStopAndUpdateReachable(new Time(10));
         assertEquals(data.getFirst(), new Time(20));
         assertEquals(data.getSecond(), new StopName("Stop A"));
@@ -72,7 +73,7 @@ public class LineSegmentTest {
     }
 
     @Test
-    public void incrementCapacityTest() throws SQLException {
+    public void incrementCapacityTest() throws SQLException, IncorrectUserInputException {
         lineSegment.incrementCapacity(new Time(10));
         assertThrows(IllegalArgumentException.class, () -> lineSegment.incrementCapacity(new Time(10)));
         Triplet<Time, StopName, Boolean> data = lineSegment.nextStopAndUpdateReachable(new Time(10));

@@ -6,6 +6,7 @@ import dataTypes.*;
 
 import dataTypes.tuples.Pair;
 import dataTypes.tuples.Triplet;
+import exceptions.IncorrectUserInputException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -88,7 +89,7 @@ public class LineTest {
     }
 
     @Test
-    public void updateReachableTest() throws SQLException {
+    public void updateReachableTest() throws SQLException, IncorrectUserInputException {
         resetStopsData();
         line.updateReachable(new Time(0), new StopName("Stop A"));
         assertTrue(stopsData.get(0).getFirst().equals(new Time(Long.MAX_VALUE)) && stopsData.get(0).getSecond().isEmpty());

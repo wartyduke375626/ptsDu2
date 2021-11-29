@@ -7,6 +7,7 @@ import dataTypes.*;
 
 import dataTypes.tuples.Pair;
 import dataTypes.tuples.Triplet;
+import exceptions.IncorrectUserInputException;
 import factories.FactoryInterface;
 import managers.Lines;
 import managers.StopsInterface;
@@ -85,17 +86,17 @@ public class LinesTest {
     }
 
     @Test
-    public void updateReachableTest() throws SQLException {
+    public void updateReachableTest() throws SQLException, IncorrectUserInputException {
         lines.updateReachable(List.of(new LineName("L1")), new StopName("Stop A"), new Time(0));
         for (int i=0; i<lineStops.size(); i++) {
             assertEquals(lineStops.get(i).getSecond(), new Time(i*timeDiff.getTime()));
         }
 
-        assertThrows(NoSuchElementException.class, () -> lines.updateReachable(List.of(new LineName("L5")), new StopName("Stop A"), new Time(0)));
+        assertThrows(IncorrectUserInputException.class, () -> lines.updateReachable(List.of(new LineName("L5")), new StopName("Stop A"), new Time(0)));
     }
 
     @Test
-    public void updateCapacityAndGetPreviousStopTest() throws SQLException {
+    public void updateCapacityAndGetPreviousStopTest() throws SQLException, IncorrectUserInputException {
         assertThrows(NoSuchElementException.class, () -> lines.updateCapacityAndGetPreviousStop(lineName, new StopName("Stop B"), new Time(10)));
         lines.updateReachable(List.of(new LineName("L1")), new StopName("Stop A"), new Time(0));
 

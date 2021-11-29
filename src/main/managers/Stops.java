@@ -3,6 +3,7 @@ package managers;
 import components.StopInterface;
 import dataTypes.*;
 import dataTypes.tuples.Pair;
+import exceptions.IncorrectUserInputException;
 import factories.FactoryInterface;
 
 import java.sql.SQLException;
@@ -40,22 +41,22 @@ public class Stops implements StopsInterface {
     }
 
     @Override
-    public void setStartingStop(StopName stop, Time time) throws SQLException {
+    public void setStartingStop(StopName stop, Time time) throws SQLException, IncorrectUserInputException {
         if (!stops.containsKey(stop)) loadStop(stop);
         stops.get(stop).updateReachableAt(time, null);
     }
 
     @Override
-    public List<LineName> getLines(StopName stop) throws SQLException {
+    public List<LineName> getLines(StopName stop) throws SQLException, IncorrectUserInputException {
         if (!stops.containsKey(stop)) loadStop(stop);
         return stops.get(stop).getLines();
     }
 
     @Override
-    public void loadStop(StopName stop) throws SQLException {
+    public void loadStop(StopName stop) throws SQLException, IncorrectUserInputException {
         if (stops.containsKey(stop)) throw new IllegalStateException("Stop has already been loaded.");
         Optional<StopInterface> newStop = factory.createStop(stop);
-        if (newStop.isEmpty()) throw new NoSuchElementException("No such stop in database.");
+        if (newStop.isEmpty()) throw new IncorrectUserInputException("No such stop in database.");
         stops.put(stop, newStop.get());
     }
 

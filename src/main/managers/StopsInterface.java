@@ -3,6 +3,7 @@ package managers;
 import components.StopInterface;
 import dataTypes.*;
 import dataTypes.tuples.Pair;
+import exceptions.IncorrectUserInputException;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -12,11 +13,11 @@ public interface StopsInterface {
 
     Optional<Pair<List<StopName>, Time>> earliestReachableStopAfter(Time time);
 
-    void setStartingStop(StopName stop, Time time) throws SQLException;
+    void setStartingStop(StopName stop, Time time) throws SQLException, IncorrectUserInputException;
 
-    List<LineName> getLines(StopName stop) throws SQLException;
+    List<LineName> getLines(StopName stop) throws SQLException, IncorrectUserInputException;
 
-    void loadStop(StopName stop) throws SQLException;
+    void loadStop(StopName stop) throws SQLException, IncorrectUserInputException;
 
     boolean isLoaded(StopName stop);
 

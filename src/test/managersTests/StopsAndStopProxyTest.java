@@ -7,6 +7,7 @@ import components.StopProxy;
 import dataTypes.*;
 
 import dataTypes.tuples.Pair;
+import exceptions.IncorrectUserInputException;
 import factories.FactoryInterface;
 import managers.Stops;
 
@@ -79,7 +80,7 @@ public class StopsAndStopProxyTest {
     }
 
     @Test
-    public void getMethodsTest() throws SQLException {
+    public void getMethodsTest() throws SQLException, IncorrectUserInputException {
         StopName proxyStop = stopProxy.getStopName();
         assertEquals(proxyStop, stopName);
 
@@ -91,7 +92,7 @@ public class StopsAndStopProxyTest {
     }
 
     @Test
-    public void updateReachableTest() throws SQLException {
+    public void updateReachableTest() throws SQLException, IncorrectUserInputException {
         stopProxy.updateReachableAt(new Time(10), new LineName("L5"));
         assertTrue(stops.isLoaded(stopName));
         Pair<Time, Optional<LineName>> data = stopProxy.getReachableAt();

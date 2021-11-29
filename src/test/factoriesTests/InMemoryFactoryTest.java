@@ -6,6 +6,7 @@ import components.StopInterface;
 import dataTypes.*;
 import dataTypes.tuples.Pair;
 import dataTypes.tuples.Triplet;
+import exceptions.IncorrectUserInputException;
 import factories.InMemoryFactory;
 
 import java.sql.SQLException;
@@ -84,7 +85,7 @@ public class InMemoryFactoryTest {
     }
 
     @Test
-    public void createStopTest() throws SQLException {
+    public void createStopTest() throws SQLException, IncorrectUserInputException {
         Optional<StopInterface> data = inMemoryFactory.createStop(new StopName("Stop B"));
         assertTrue(data.isPresent());
         assertEquals(data.get().getStopName(), new StopName("Stop B"));
@@ -95,7 +96,7 @@ public class InMemoryFactoryTest {
     }
 
     @Test
-    public void createLineTest() throws SQLException {
+    public void createLineTest() throws SQLException, IncorrectUserInputException {
         Optional<LineInterface> data = inMemoryFactory.createLine(new LineName("L1"), new Time(0));
         assertTrue(data.isPresent());
         LineInterface line = data.get();

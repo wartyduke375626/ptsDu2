@@ -3,6 +3,7 @@ package components;
 import dataTypes.*;
 import dataTypes.tuples.Pair;
 import dataTypes.tuples.Triplet;
+import exceptions.IncorrectUserInputException;
 
 import java.sql.SQLException;
 import java.util.Collections;
@@ -27,7 +28,7 @@ public class Line implements LineInterface {
     }
 
     @Override
-    public void updateReachable(Time time, StopName stop) throws SQLException {
+    public void updateReachable(Time time, StopName stop) throws SQLException, IncorrectUserInputException {
 
         //find starting lineSegment and determine travel time from first stop till starting lineSegment
         StopName nextStop = firstStop;

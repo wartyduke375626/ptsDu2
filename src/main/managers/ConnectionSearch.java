@@ -3,6 +3,7 @@ package managers;
 import dataTypes.*;
 import dataTypes.tuples.Pair;
 import dataTypes.tuples.Triplet;
+import exceptions.IncorrectUserInputException;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -17,7 +18,7 @@ public class ConnectionSearch {
         this.lines = lines;
     }
 
-    public ConnectionData search(StopName from, StopName to, Time time) {
+    public Optional<ConnectionData> search(StopName from, StopName to, Time time) {
         try {
             stops.setStartingStop(from, time);
 
@@ -29,7 +30,10 @@ public class ConnectionSearch {
                     lines.updateReachable(stopLines, tmpStop, time);
                 }
                 Optional<Pair<List<StopName>, Time>> data = stops.earliestReachableStopAfter(time);
-                if (data.isEmpty()) return null;
+                if (data.isEmpty()) {
+                    System.out.println("No connection has been found");
+                    return Optional.empty();
+                }
                 earliestStops.addAll(data.get().getFirst());
                 time = data.get().getSecond();
             }
@@ -48,12 +52,16 @@ public class ConnectionSearch {
 
             lines.saveUpdatedLineSegments();
 
-            lines.clean();
-            stops.clean();
-            return result;
+            return Optional.of(result);
+
         } catch (SQLException e) {
             System.err.println("Database fatal error: " + e.getMessage());
-            return null;
+            return Optional.empty();
+
+        } catch (IncorrectUserInputException e) {
+            System.out.println("Incorrect user input: " + e.getMessage());
+            return Optional.empty();
+
         } finally {
             lines.clean();
             stops.clean();

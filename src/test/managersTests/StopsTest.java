@@ -6,6 +6,7 @@ import components.StopInterface;
 import dataTypes.*;
 
 import dataTypes.tuples.Pair;
+import exceptions.IncorrectUserInputException;
 import factories.FactoryInterface;
 import managers.Stops;
 
@@ -75,7 +76,7 @@ public class StopsTest {
     }
 
     @Test
-    public void earliestReachableStopAfterTest() throws SQLException {
+    public void earliestReachableStopAfterTest() throws SQLException, IncorrectUserInputException {
         assertTrue(stops.earliestReachableStopAfter(new Time(10)).isEmpty());
         stops.loadStop(new StopName("Stop A"));
         stops.loadStop(new StopName("Stop B"));
@@ -101,7 +102,7 @@ public class StopsTest {
         assertEquals(data.getFirst().get(0), new StopName("Stop C"));
         assertEquals(data.getSecond(), new Time(30));
 
-        assertThrows(NoSuchElementException.class, () -> stops.loadStop(new StopName("Stop D")));
+        assertThrows(IncorrectUserInputException.class, () -> stops.loadStop(new StopName("Stop D")));
         assertThrows(NoSuchElementException.class, () -> stops.getStop(new StopName("Stop D")));
     }
 }

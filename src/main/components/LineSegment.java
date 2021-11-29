@@ -3,6 +3,7 @@ package components;
 import dataTypes.*;
 import dataTypes.tuples.Pair;
 import dataTypes.tuples.Triplet;
+import exceptions.IncorrectUserInputException;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -37,7 +38,7 @@ public class LineSegment implements LineSegmentInterface {
     }
 
     @Override
-    public Triplet<Time, StopName, Boolean> nextStopAndUpdateReachable(Time startTime) throws SQLException {
+    public Triplet<Time, StopName, Boolean> nextStopAndUpdateReachable(Time startTime) throws SQLException, IncorrectUserInputException {
         if (!numberOfPassengers.containsKey(startTime)) throw new NoSuchElementException("No match for bus at startTime.");
         Time time = new Time(timeToNextStop.getTime() + startTime.getTime());
         boolean isFree = (numberOfPassengers.get(startTime) < capacity);

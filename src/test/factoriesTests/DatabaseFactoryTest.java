@@ -8,6 +8,7 @@ import dataTypes.*;
 import dataTypes.tuples.Pair;
 import dataTypes.tuples.Triplet;
 import database.DatabaseInterface;
+import exceptions.IncorrectUserInputException;
 import factories.DatabaseFactory;
 import managers.Stops;
 import org.junit.Before;
@@ -147,7 +148,7 @@ public class DatabaseFactoryTest {
     }
 
     @Test
-    public void createStopTest() throws SQLException {
+    public void createStopTest() throws SQLException, IncorrectUserInputException {
         Optional<StopInterface> data = databaseFactory.createStop(new StopName("STOP A"));
         assertTrue(data.isPresent());
         assertEquals(data.get().getStopName(), new StopName("STOP A"));
@@ -158,7 +159,7 @@ public class DatabaseFactoryTest {
     }
 
     @Test
-    public void createLineTest() throws SQLException {
+    public void createLineTest() throws SQLException, IncorrectUserInputException {
         Optional<LineInterface> data = databaseFactory.createLine(new LineName("L1"), new Time(0));
         assertTrue(data.isPresent());
         LineInterface line = data.get();

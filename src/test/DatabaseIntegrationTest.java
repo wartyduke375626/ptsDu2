@@ -34,10 +34,13 @@ public class DatabaseIntegrationTest {
 
     @Test
     public void searchTest1() throws SQLException {
-        assertThrows(NoSuchElementException.class, () -> connectionSearch.search(new StopName("STOP U"), new StopName("STOP O"), new Time(0)));
+        Optional<ConnectionData> data = connectionSearch.search(new StopName("STOP U"), new StopName("STOP O"), new Time(0));
+        assertTrue(data.isEmpty());
 
-        ConnectionData data = connectionSearch.search(new StopName("STOP F"), new StopName("STOP D"), new Time(20));
-        List<Quadruplet<LineName, StopName, Time, TimeDiff>> segmentsData = data.getTravelSegments();
+        data = connectionSearch.search(new StopName("STOP F"), new StopName("STOP D"), new Time(20));
+        assertTrue(data.isPresent());
+        List<Quadruplet<LineName, StopName, Time, TimeDiff>> segmentsData = data.get().getTravelSegments();
+
         assertEquals(segmentsData.size(), 4);
         Quadruplet<LineName, StopName, Time, TimeDiff> x = segmentsData.get(0);
         assertEquals(x.getFirst(), new LineName("L2"));
@@ -59,10 +62,34 @@ public class DatabaseIntegrationTest {
         assertEquals(x.getSecond(), new StopName("STOP H"));
         assertEquals(x.getThird(), new Time(65));
         assertEquals(x.getForth(), new TimeDiff(4));
-        assertEquals(data.getLastStop(), new StopName("STOP D"));
+        assertEquals(data.get().getLastStop(), new StopName("STOP D"));
 
         database.startSession();
         database.resetPassengers();
         database.endSession();
     }
+
+    @Test
+    public void searchTest2() throws SQLException {
+        Optional<ConnectionData> data = connectionSearch.search(new StopName("NO STOP"), new StopName("NO STOP"), new Time(0));
+        assertTrue(data.isEmpty());
+
+        for (int i=0; i<5; i++) {
+            data = connectionSearch.search(new StopName("STOP A"), new StopName("STOP D"), new Time(20));
+            assertTrue(data.isPresent());
+            data = connectionSearch.search(new StopName("STOP A"), new StopName("STOP D"), new Time(50));
+            assertTrue(data.isPresent());
+            data = connectionSearch.search(new StopName("STOP A"), new StopName("STOP D"), new Time(80));
+            assertTrue(data.isPresent());
+        }
+        //segment should now be fully booked
+
+        data = connectionSearch.search(new StopName("STOP A"), new StopName("STOP D"), new Time(20));
+        assertTrue(data.isEmpty());
+
+        database.startSession();
+        database.resetPassengers();
+        database.endSession();
+    }
+
 }
