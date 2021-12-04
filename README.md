@@ -8,6 +8,7 @@ The app has two versions:
 
 ## Ho to set up:
 1. A Makefile is present in the project (UNIX only), which will create a testing database (testDB.db) using sqlite3 in the project root directory.
+    - go into the project root directory, which contains the Makefile
     - use "make testDB" to create testing database (this database is used by database tests and will need to be present in the project root directory when testing)
     - use "make clean" to delete testDB.db file
     - if the testDB.db gets corrupted you can use "make testDB" anagin to recreate it

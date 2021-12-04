@@ -1,0 +1,19 @@
+Stops:
+- zjednotila by som getStop a loadStop do jednej metody ktora by sa na zaklade isLoaded rozhodovala ci treba 	nacitat z databazy
+- isLoaded metoda mi pride trochu zbytocna, if(stops.containsKey(stop)) je dost vystizne a netreba mat nato samostatnu metodu
+- pride mi trochu neintuitivne riesenie problemu, ze stopproxy potrebuje instanciu stops, cez vlozenie stops do factory. Trochu viac sa mi paci spravit stops cez singleton pattern, aj ked potom ma zas kazdy pristup k tejto instancii, co tiez nie je idealne.
+
+Lines:
+- trochu sa mi nepaci, ze modifikaciu line segmentov zapisujes v lines, intuitivne mi pride, ze lines by malo robit reziu s linami a kazdy line so svojimi line segmentami. Na druhu stranu chapem, ze to robis pomocou metody faktoricky a tu potom nemusis zbytocne injectovat do line.
+
+databaza:
+- paci sa mi rozdelenie definicie a naplnenia tabuliek do dvoch suborov
+
+celkovo:
+- paci sa mi struktura suborov, ze su pekne rozdelene triedy podla nejakych okruhov (ja som sa v svojich 20 triedach v jednom subore uz ku koncu moc nevyznala)
+- tiez sa mi pacia interfacy ku kazdej triede a potom vies robit pekne solitary testy
+- celkovo velmi pekny kod, naozaj neviem povedat, ze je nieco zle :)
+
+zamyslenie: nie som si ista, co je best practice, ale pride mi, ze sa mozes spoliehat nato, ze metody sa volaju v nejakom poradi. Napriklad v stops.setStarting stop je jasne (aj nazov to indikuje), ze stop este nebola nacitana, podobne stops.getLines sa vola na stopkach, s ktorymi sa uz nieco dialo, teda tiez uz su nacitane. Preto mi v takychto pripadoch pridu kontroli typu, ci je/ nie je nacitana dana stopka zbytocne. Ale vravim neviem, ci je best practice sa na nieco taketo spoliehat.
+
+Jitka Muravska
