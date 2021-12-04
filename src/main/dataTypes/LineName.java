@@ -11,6 +11,10 @@ public class LineName {
         this.name = name;
     }
 
+    public LineName(LineName lineName) {
+        this.name = lineName.name;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

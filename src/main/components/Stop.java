@@ -15,7 +15,7 @@ public class Stop implements StopInterface {
     private LineName reachableVia = null;
 
     public Stop(StopName stopName, List<LineName> lines) {
-        this.stopName = stopName;
+        this.stopName = new StopName(stopName);
         this.lines = Collections.unmodifiableList(lines);
     }
 
@@ -23,8 +23,9 @@ public class Stop implements StopInterface {
     public void updateReachableAt(Time time, LineName line) {
         if (time == null) throw new IllegalArgumentException("Time cannot be null.");
         if (time.compareTo(reachableAt) < 0) {
-            reachableAt = time;
-            reachableVia = line;
+            reachableAt = new Time(time);
+            if (line == null) reachableVia = null;
+            else reachableVia = new LineName(line);
         }
     }
 

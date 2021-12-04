@@ -11,6 +11,10 @@ public class TimeDiff {
         this.time = time;
     }
 
+    public TimeDiff(TimeDiff timeDiff) {
+        this.time = timeDiff.time;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

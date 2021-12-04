@@ -21,11 +21,11 @@ public class LineSegment implements LineSegmentInterface {
 
     public LineSegment(TimeDiff timeToNextStop, TimeDiff timeDiffFromStart, StopInterface nextStop, int capacity, LineName lineName, Map<Time, Integer> numberOfPassengers, int segmentIndex) {
         if (capacity < 0) throw new IllegalArgumentException("Capacity cannot be negative.");
-        this.timeToNextStop = timeToNextStop;
-        this.timeDiffFromStart = timeDiffFromStart;
+        this.timeToNextStop = new TimeDiff(timeToNextStop);
+        this.timeDiffFromStart = new TimeDiff(timeDiffFromStart);
         this.nextStop = nextStop;
         this.capacity = capacity;
-        this.lineName = lineName;
+        this.lineName = new LineName(lineName);
         this.numberOfPassengers = new HashMap<>(numberOfPassengers);
         this.segmentIndex = segmentIndex;
     }

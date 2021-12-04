@@ -11,6 +11,10 @@ public class StopName {
         this.name = name;
     }
 
+    public StopName(StopName stopName) {
+        this.name = stopName.name;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

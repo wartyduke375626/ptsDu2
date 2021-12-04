@@ -21,9 +21,9 @@ public class Line implements LineInterface {
     public Line(LineName lineName, List<Time> startingTimes, StopName firstStop, List<LineSegmentInterface> lineSegments) {
         if (startingTimes.size() == 0) throw new IllegalArgumentException("Line must have at least one bus.");
         if (lineSegments.size() == 0) throw new IllegalArgumentException("Line must have at least one segment.");
-        this.lineName = lineName;
+        this.lineName = new LineName(lineName);
         this.startingTimes = Collections.unmodifiableList(startingTimes);
-        this.firstStop = firstStop;
+        this.firstStop = new StopName(firstStop);
         this.lineSegments = Collections.unmodifiableList(lineSegments);
     }
 

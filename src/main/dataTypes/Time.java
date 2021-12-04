@@ -11,6 +11,10 @@ public class Time implements Comparable<Time>{
         this.time = time;
     }
 
+    public Time(Time time) {
+        this.time = time.time;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

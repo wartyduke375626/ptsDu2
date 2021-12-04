@@ -18,7 +18,7 @@ public class StopProxy implements StopInterface {
 
     public StopProxy(StopsInterface stops, StopName stopName) {
         this.stops = stops;
-        this.stopName = stopName;
+        this.stopName = new StopName(stopName);
     }
 
     @Override
