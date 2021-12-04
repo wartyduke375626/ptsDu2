@@ -34,7 +34,7 @@ public class LineSegment implements LineSegmentInterface {
     public Pair<Time, StopName> nextStop(Time startTime) {
         if (!numberOfPassengers.containsKey(startTime)) throw new NoSuchElementException("No match for bus at startTime.");
         Time time = new Time(timeToNextStop.getTime() + startTime.getTime());
-        return new Pair<>(time, nextStop.getStopName());
+        return new Pair<>(new Time(time), new StopName(nextStop.getStopName()));
     }
 
     @Override
@@ -43,12 +43,12 @@ public class LineSegment implements LineSegmentInterface {
         Time time = new Time(timeToNextStop.getTime() + startTime.getTime());
         boolean isFree = (numberOfPassengers.get(startTime) < capacity);
         if (isFree) nextStop.updateReachableAt(time, lineName);
-        return new Triplet<>(time, nextStop.getStopName(), isFree);
+        return new Triplet<>(new Time(time), new StopName(nextStop.getStopName()), isFree);
     }
 
     @Override
     public LineName getLine() {
-        return lineName;
+        return new LineName(lineName);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class LineSegment implements LineSegmentInterface {
 
     @Override
     public TimeDiff getTimeDiffFromStart() {
-        return timeDiffFromStart;
+        return new TimeDiff(timeDiffFromStart);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class LineSegment implements LineSegmentInterface {
 
     @Override
     public Map<Time, Integer> getUpdatedBusses() {
-        return updatedBusses;
+        return Collections.unmodifiableMap(updatedBusses);
     }
 
 }

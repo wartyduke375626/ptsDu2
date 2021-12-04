@@ -88,7 +88,7 @@ public class Line implements LineInterface {
 
         Time bus = new Time(time.getTime() - lastTimeDiff.getTime());
         lineSegments.get(--i).incrementCapacity(bus);
-        return new Triplet<>(previousStop, bus, lastTimeDiff);
+        return new Triplet<>(new StopName(previousStop), new Time(bus), new TimeDiff(lastTimeDiff));
     }
 
     @Override

@@ -40,7 +40,7 @@ public class StopProxy implements StopInterface {
 
     @Override
     public StopName getStopName() {
-        return stopName;
+        return new StopName(stopName);
     }
 
     @Override

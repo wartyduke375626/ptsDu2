@@ -31,12 +31,13 @@ public class Stop implements StopInterface {
 
     @Override
     public Pair<Time, Optional<LineName>> getReachableAt() {
-        return new Pair<>(reachableAt, Optional.ofNullable(reachableVia));
+        if (reachableVia == null) return new Pair<>(new Time(reachableAt), Optional.empty());
+        else return new Pair<>(new Time(reachableAt), Optional.of(new LineName(reachableVia)));
     }
 
     @Override
     public StopName getStopName() {
-        return stopName;
+        return new StopName(stopName);
     }
 
     @Override
