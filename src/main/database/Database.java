@@ -13,8 +13,8 @@ public class Database implements DatabaseInterface {
     private final String databaseUrl;
     private Connection connection = null;
 
-    public Database(String databasePath) {
-        databaseUrl = "jdbc:sqlite:" + databasePath;
+    public Database(String databaseUrl) {
+        this.databaseUrl = databaseUrl;
     }
 
     @Override

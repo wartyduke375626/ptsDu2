@@ -5,6 +5,7 @@ import dataTypes.*;
 import dataTypes.tuples.Pair;
 import dataTypes.tuples.Triplet;
 import database.Database;
+import integrationTests.DBPathsAndURLs;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,7 +17,6 @@ import static org.junit.Assert.*;
 
 public class DatabaseTest {
 
-    private static final String TEST_DB_PATH = "testDB.db";
     private static final TimeDiff MAX_START_TIME_DIFFERENCE = new TimeDiff(100);
 
     private Database database;
@@ -30,7 +30,7 @@ public class DatabaseTest {
 
     @Before
     public void setUp() throws IOException, InterruptedException {
-        database = new Database(TEST_DB_PATH);
+        database = new Database(DBPathsAndURLs.TEST_DB_URL);
     }
 
     @Test
